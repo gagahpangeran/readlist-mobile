@@ -24,6 +24,13 @@ class _ListPageState extends State<ListPage> {
                 ))
             .toList(),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/form');
+        },
+        tooltip: 'Add New List',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
