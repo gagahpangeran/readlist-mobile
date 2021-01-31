@@ -11,13 +11,21 @@ class _FormPageState extends State<FormPage> {
   String _link;
   String _title;
   bool _isRead = true;
+  bool _isLoading = false;
 
   GistAPI api = GistAPI();
 
-  _submitForm() {
+  _submitForm() async {
+    setState(() => _isLoading = true);
     final readListItem =
         ReadListItem(link: _link, title: _title, isRead: _isRead);
-    api.submitData(readListItem);
+    bool success = await api.submitData(readListItem);
+
+    if (success) {
+      Navigator.pushNamed(context, '/list');
+    }
+
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -27,42 +35,46 @@ class _FormPageState extends State<FormPage> {
         title: Text('Add New List'),
       ),
       body: Form(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              decoration: const InputDecoration(
-                icon: Icon(Icons.link),
-                labelText: 'Link',
+        child: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.link),
+                      labelText: 'Link',
+                    ),
+                    onChanged: (value) => setState(() => _link = value),
+                    validator: (value) =>
+                        value.isEmpty ? 'Please enter the link' : null,
+                  ),
+                  TextFormField(
+                    onChanged: (value) => setState(() => _title = value),
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.title),
+                      labelText: 'Title',
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                        value: _isRead,
+                        onChanged: (value) => setState(() => _isRead = value),
+                      ),
+                      Text('Already Read'),
+                    ],
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () => _submitForm(),
+                      child: Text('Submit'),
+                    ),
+                  ),
+                ],
               ),
-              onChanged: (value) => setState(() => _link = value),
-              validator: (value) =>
-                  value.isEmpty ? 'Please enter the link' : null,
-            ),
-            TextFormField(
-              onChanged: (value) => setState(() => _title = value),
-              decoration: const InputDecoration(
-                icon: Icon(Icons.title),
-                labelText: 'Title',
-              ),
-            ),
-            Row(
-              children: <Widget>[
-                Checkbox(
-                  value: _isRead,
-                  onChanged: (value) => setState(() => _isRead = value),
-                ),
-                Text('Already Read'),
-              ],
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _submitForm(),
-                child: Text('Submit'),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
