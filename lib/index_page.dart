@@ -9,11 +9,17 @@ class IndexPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/list');
-                },
-                child: Text('Show List')),
-            TextButton(onPressed: null, child: Text('Add New')),
+              onPressed: () {
+                Navigator.pushNamed(context, '/list');
+              },
+              child: Text('Show List'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/form');
+              },
+              child: Text('Add New'),
+            ),
           ],
         ),
       ),

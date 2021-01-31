@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readlist/form_page.dart';
 import 'package:readlist/index_page.dart';
 import 'package:readlist/list_page.dart';
 
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => IndexPage(),
         '/list': (context) => ListPage(),
+        '/form': (context) => FormPage(),
       },
     );
   }
