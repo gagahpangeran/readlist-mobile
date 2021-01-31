@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
+import 'package:readlist/components/loading_screen.dart';
 import 'package:readlist/models/read_list_item.dart';
 
 class ListPage extends StatefulWidget {
@@ -49,9 +50,7 @@ class _ListPageState extends State<ListPage> {
             );
           }
 
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return LoadingScreen();
         },
       ),
       floatingActionButton: FloatingActionButton(

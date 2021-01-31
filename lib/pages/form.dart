@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
+import 'package:readlist/components/loading_screen.dart';
 import 'package:readlist/models/read_list_item.dart';
 
 class FormPage extends StatefulWidget {
@@ -36,9 +37,7 @@ class _FormPageState extends State<FormPage> {
       ),
       body: Form(
         child: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
+            ? LoadingScreen()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
