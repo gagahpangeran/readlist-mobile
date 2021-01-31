@@ -8,11 +8,11 @@ class IndexPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(
+            ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/list'),
               child: Text('Show List'),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/form'),
               child: Text('Add New'),
             ),
