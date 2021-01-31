@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readlist/api/gist.dart';
 import 'package:readlist/models/read_list_item.dart';
 
 class ListPage extends StatefulWidget {
@@ -7,10 +8,15 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  List<ReadListItem> readList = [
-    new ReadListItem(link: 'https://testes.co', title: 'Test hehe'),
-    new ReadListItem(link: 'http://hello.hhh'),
-  ];
+  GistAPI api = new GistAPI();
+
+  Future<List<ReadListItem>> futureReadList;
+
+  @override
+  void initState() {
+    super.initState();
+    futureReadList = api.fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +24,35 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(
         title: Text('Read List'),
       ),
-      body: ListView(
-        children: readList
-            .map((readListItem) => ListTile(
-                  title: Text(readListItem.title),
-                ))
-            .toList(),
+      body: FutureBuilder<List<ReadListItem>>(
+        future: futureReadList,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var readList = snapshot.data;
+
+            if (readList.length <= 0) {
+              return Center(
+                child: Text("No Data!"),
+              );
+            }
+
+            return ListView(
+              children: readList
+                  .map((readListItem) => ListTile(
+                        title: Text(readListItem.title),
+                      ))
+                  .toList(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error when fetching data!"),
+            );
+          }
+
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/form'),
