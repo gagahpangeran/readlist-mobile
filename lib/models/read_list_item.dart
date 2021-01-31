@@ -23,7 +23,7 @@ class ReadListItem {
 
   String get title => _title;
 
-  static ReadListItem fromJson(Map<String, dynamic> json) => new ReadListItem(
+  factory ReadListItem.fromJson(Map<String, dynamic> json) => new ReadListItem(
         id: json['id'],
         link: json['link'],
         isRead: json['isRead'],
