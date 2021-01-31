@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readlist/read_list_item_model.dart';
 
 class ListPage extends StatefulWidget {
   @override
@@ -6,9 +7,9 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  List<Map<String, String>> data = [
-    {'url': 'http://test1', 'title': 'Ini tes'},
-    {'url': 'http://test2', 'title': 'http://test2'},
+  List<ReadListItem> readList = [
+    new ReadListItem(link: 'https://testes.co', title: 'Test hehe'),
+    new ReadListItem(link: 'http://hello.hhh'),
   ];
 
   @override
@@ -18,9 +19,9 @@ class _ListPageState extends State<ListPage> {
         title: Text('Read List'),
       ),
       body: ListView(
-        children: data
-            .map((d) => ListTile(
-                  title: Text(d['title']),
+        children: readList
+            .map((readListItem) => ListTile(
+                  title: Text(readListItem.title),
                 ))
             .toList(),
       ),
