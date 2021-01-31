@@ -21,7 +21,12 @@ class ReadListItem {
     _updatedAt = updatedAt ?? _createdAt;
   }
 
+  String get id => _id;
+  String get link => _link;
   String get title => _title;
+  bool get isRead => _isRead;
+  String get createdAt => _createdAt.toString();
+  String get updatedAt => _updatedAt.toString();
 
   Map<String, dynamic> toMap() {
     return {
