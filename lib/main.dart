@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/index_page.dart';
+import 'package:readlist/list_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +13,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: IndexPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => IndexPage(),
+        '/list': (context) => ListPage(),
+      },
     );
   }
 }
