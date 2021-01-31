@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/read_list_item_model.dart';
+import 'package:readlist/models/read_list_item.dart';
 
 class ListPage extends StatefulWidget {
   @override

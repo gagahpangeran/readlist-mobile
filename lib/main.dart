@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/form_page.dart';
-import 'package:readlist/index_page.dart';
-import 'package:readlist/list_page.dart';
+import 'package:readlist/pages/form.dart';
+import 'package:readlist/pages/index.dart';
+import 'package:readlist/pages/list.dart';
 
 void main() => runApp(MyApp());
 
