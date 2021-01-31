@@ -4,8 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:readlist/models/read_list_item.dart';
 
 class GistAPI {
-
-
   String _gistId = 'secret';
   String _apiEndpoint = 'https://api.github.com/gists';
 
@@ -13,7 +11,7 @@ class GistAPI {
     'Authorization': 'token secret',
   };
 
-  void submitData(ReadListItem readListItem) async {
+  Future<bool> submitData(ReadListItem readListItem) async {
     final savedData = await fetchData();
     savedData.add(readListItem);
 
@@ -31,10 +29,9 @@ class GistAPI {
     );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      print(data);
+      return true;
     } else {
-      throw Exception('Failed to submit data');
+      return false;
     }
   }
 
