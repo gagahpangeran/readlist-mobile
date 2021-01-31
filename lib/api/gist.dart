@@ -38,6 +38,16 @@ class GistAPI {
     }
   }
 
+  Future<List<ReadListItem>> fetchData() async {
+    final res = await http.get('$_apiEndpoint/$_gistId', headers: headers);
+
+    if (res.statusCode == 200) {
+      var content = jsonDecode(res.body)['files']['data.json']['content'];
+      List<dynamic> data = jsonDecode(content)['data'];
+
+      return data == null
+          ? List()
+          : data.map((d) => ReadListItem.fromJson(d)).toList();
     } else {
       throw Exception('Failed to fetch data');
     }
