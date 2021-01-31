@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:readlist/api/gist.dart';
+import 'package:readlist/models/read_list_item.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -9,6 +11,14 @@ class _FormPageState extends State<FormPage> {
   String _link;
   String _title;
   bool _isRead = true;
+
+  GistAPI api = GistAPI();
+
+  _submitForm() {
+    final readListItem =
+        ReadListItem(link: _link, title: _title, isRead: _isRead);
+    api.submitData(readListItem);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +37,7 @@ class _FormPageState extends State<FormPage> {
               ),
               onChanged: (value) => setState(() => _link = value),
               validator: (value) =>
-                  value.isEmpty ? 'Please enter some text' : null,
+                  value.isEmpty ? 'Please enter the link' : null,
             ),
             TextFormField(
               onChanged: (value) => setState(() => _title = value),
@@ -47,7 +57,7 @@ class _FormPageState extends State<FormPage> {
             ),
             Center(
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: () => _submitForm(),
                 child: Text('Submit'),
               ),
             ),
