@@ -4,19 +4,40 @@ import 'package:http/http.dart' as http;
 import 'package:readlist/models/read_list_item.dart';
 
 class GistAPI {
-  String _rawGistLink = 'https:/secret.com/data.json';
-  String _apiKey = 'secret';
 
-  GistAPI();
 
-  void submitData(ReadListItem readListItem) {}
+  String _gistId = 'secret';
+  String _apiEndpoint = 'https://api.github.com/gists';
 
-  Future<List<ReadListItem>> fetchData() async {
-    final response = await http.get(_rawGistLink);
+  Map<String, String> headers = {
+    'Authorization': 'token secret',
+  };
+
+  void submitData(ReadListItem readListItem) async {
+    final savedData = await fetchData();
+    savedData.add(readListItem);
+
+    String jsonData =
+        jsonEncode({'data': savedData.map((data) => data.toMap()).toList()});
+
+    final response = await http.patch(
+      '$_apiEndpoint/$_gistId',
+      headers: headers,
+      body: jsonEncode({
+        'files': {
+          'data.json': {'content': jsonData}
+        }
+      }),
+    );
 
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      return data == null ? List() : ReadListItem.fromJson(data);
+      var data = jsonDecode(response.body);
+      print(data);
+    } else {
+      throw Exception('Failed to submit data');
+    }
+  }
+
     } else {
       throw Exception('Failed to fetch data');
     }
