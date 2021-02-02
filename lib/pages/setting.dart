@@ -12,20 +12,23 @@ class _SettingPageState extends State<SettingPage> {
   String _gistId;
   String _fileName;
 
-  Future<Setting> futureSetting;
+  Future<Setting> _futureSetting;
 
   void _saveSetting() {
-    Setting.create(
-      apiKey: _apiKey,
-      gistId: _gistId,
-      fileName: _fileName,
-    );
+    setState(() => {
+          _futureSetting = Setting.create(
+            apiKey: _apiKey,
+            gistId: _gistId,
+            fileName: _fileName,
+          )
+        });
+    Navigator.pop(context);
   }
 
   @override
   void initState() {
     super.initState();
-    futureSetting = Setting.load();
+    _futureSetting = Setting.load();
   }
 
   @override
@@ -36,7 +39,7 @@ class _SettingPageState extends State<SettingPage> {
           title: Text('Set Up Gist Database'),
         ),
         body: FutureBuilder<Setting>(
-          future: futureSetting,
+          future: _futureSetting,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var setting = snapshot.data;
