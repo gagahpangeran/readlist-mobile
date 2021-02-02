@@ -31,6 +31,16 @@ class _ListPageState extends State<ListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Read List'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.refresh,
+            ),
+            onPressed: () => setState(() {
+              _futureReadList = api.fetchData();
+            }),
+          ),
+        ],
       ),
       body: FutureBuilder<List<ReadListItem>>(
         future: _futureReadList,
