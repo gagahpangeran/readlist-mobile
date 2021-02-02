@@ -12,6 +12,13 @@ jobs:
       - name: Checkout Master
         uses: actions/checkout@v2
 
+      - name: Flutter Cache
+        id: flutter-cache
+        uses: actions/cache@v2
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
