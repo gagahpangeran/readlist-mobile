@@ -26,6 +26,13 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
+  void _openSetting() async {
+    await Navigator.pushNamed(context, '/setting');
+    setState(() {
+      _futureReadList = api.fetchData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +70,17 @@ class _ListPageState extends State<ListPage> {
             );
           } else if (snapshot.hasError) {
             return Center(
-              child: Text("Error when fetching data!"),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Error when fetching data!"),
+                  Text("Make sure you already set up you setting."),
+                  ElevatedButton(
+                    onPressed: _openSetting,
+                    child: Text('Open Setting'),
+                  ),
+                ],
+              ),
             );
           }
 
