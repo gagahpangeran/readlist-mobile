@@ -64,6 +64,10 @@ jobs:
           name: apk-build
           path: /tmp
 
+      - name: Setup Version
+        id: setup-version
+        run: echo "::set-output name=ver::$(echo ${{ github.ref }} | cut -d 'v' -f2)"
+
       - name: Upload ARM APK
         uses: actions/upload-release-asset@v1
         env:
@@ -71,7 +75,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: /tmp/app-armeabi-v7a-release.apk
-          asset_name: com.gagahpangeran.readlist-arm-${{ github.ref }}.apk
+          asset_name: com.gagahpangeran.readlist-arm-v${{ steps.setup-version.outputs.ver }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload ARM64 APK
@@ -81,7 +85,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: /tmp/app-arm64-v8a-release.apk
-          asset_name: com.gagahpangeran.readlist-arm64-${{ github.ref }}.apk
+          asset_name: com.gagahpangeran.readlist-arm64-v${{ steps.setup-version.outputs.ver }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload X86_64 APK
@@ -91,5 +95,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: /tmp/app-x86_64-release.apk
-          asset_name: com.gagahpangeran.readlist-x86_64-${{ github.ref }}.apk
+          asset_name: com.gagahpangeran.readlist-x86_64-v${{ steps.setup-version.outputs.ver }}.apk
           asset_content_type: application/vnd.android.package-archive
