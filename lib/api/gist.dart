@@ -2,14 +2,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/models/setting.dart';
 
 class GistAPI {
-  String _gistId = 'secret';
   String _apiEndpoint = 'https://api.github.com/gists';
-
-  Map<String, String> headers = {
-    'Authorization': 'token secret',
-  };
 
   Future<bool> submitData(ReadListItem readListItem) async {
     final savedData = await fetchData();
@@ -18,12 +14,14 @@ class GistAPI {
     String jsonData =
         jsonEncode({'data': savedData.map((data) => data.toMap()).toList()});
 
+    final setting = await Setting.load();
+
     final response = await http.patch(
-      '$_apiEndpoint/$_gistId',
-      headers: headers,
+      '$_apiEndpoint/${setting.gistId}',
+      headers: {'Authorization': 'token ${setting.apiKey}'},
       body: jsonEncode({
         'files': {
-          'data.json': {'content': jsonData}
+          '${setting.fileName}': {'content': jsonData}
         }
       }),
     );
@@ -36,14 +34,21 @@ class GistAPI {
   }
 
   Future<List<ReadListItem>> fetchData() async {
-    final res = await http.get('$_apiEndpoint/$_gistId', headers: headers);
+    final setting = await Setting.load();
+
+    final res = await http.get(
+      '$_apiEndpoint/${setting.gistId}',
+      headers: {
+        'Authorization': 'token ${setting.apiKey}',
+      },
+    );
 
     if (res.statusCode == 200) {
-      var content = jsonDecode(res.body)['files']['data.json']['content'];
+      var content = jsonDecode(res.body)['files'][setting.fileName]['content'];
       List<dynamic> data = jsonDecode(content)['data'];
 
       return data == null
-          ? List()
+          ? []
           : data.map((d) => ReadListItem.fromJson(d)).toList();
     } else {
       throw Exception('Failed to fetch data');
