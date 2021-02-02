@@ -19,6 +19,13 @@ class _ListPageState extends State<ListPage> {
     _futureReadList = api.fetchData();
   }
 
+  void _openForm() async {
+    await Navigator.pushNamed(context, '/form');
+    setState(() {
+      _futureReadList = api.fetchData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +61,7 @@ class _ListPageState extends State<ListPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/form'),
+        onPressed: _openForm,
         tooltip: 'Add New List',
         child: Icon(Icons.add),
       ),
