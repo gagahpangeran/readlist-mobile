@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/pages/form.dart';
-import 'package:readlist/pages/index.dart';
 import 'package:readlist/pages/list.dart';
 import 'package:readlist/pages/setting.dart';
 
@@ -15,9 +14,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: '/list',
       routes: {
-        '/': (context) => IndexPage(),
         '/list': (context) => ListPage(),
         '/form': (context) => FormPage(),
         '/setting': (content) => SettingPage(),
