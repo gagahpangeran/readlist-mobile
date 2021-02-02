@@ -1,4 +1,4 @@
-package com.example.readlist
+package com.gagahpangeran.readlist
 
 import io.flutter.embedding.android.FlutterActivity
 
