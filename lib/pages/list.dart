@@ -11,12 +11,12 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   GistAPI api = new GistAPI();
 
-  Future<List<ReadListItem>> futureReadList;
+  Future<List<ReadListItem>> _futureReadList;
 
   @override
   void initState() {
     super.initState();
-    futureReadList = api.fetchData();
+    _futureReadList = api.fetchData();
   }
 
   @override
@@ -26,7 +26,7 @@ class _ListPageState extends State<ListPage> {
         title: Text('Read List'),
       ),
       body: FutureBuilder<List<ReadListItem>>(
-        future: futureReadList,
+        future: _futureReadList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var readList = snapshot.data;
