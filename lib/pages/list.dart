@@ -87,6 +87,20 @@ class _ListPageState extends State<ListPage> {
           return LoadingScreen();
         },
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            ListTile(
+              title: Text('Setting'),
+              onTap: () {
+                Navigator.pop(context);
+                _openSetting();
+              },
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openForm,
         tooltip: 'Add New List',
