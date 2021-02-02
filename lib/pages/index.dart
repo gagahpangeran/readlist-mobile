@@ -16,6 +16,10 @@ class IndexPage extends StatelessWidget {
               onPressed: () => Navigator.pushNamed(context, '/form'),
               child: Text('Add New'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/setting'),
+              child: Text('Setting'),
+            ),
           ],
         ),
       ),
