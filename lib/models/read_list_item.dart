@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadListItem {
@@ -8,11 +9,14 @@ class ReadListItem {
   DateTime _createdAt;
   DateTime _updatedAt;
 
-  ReadListItem({id, link, title, isRead, createdAt, updatedAt}) {
-    if (link == null) {
-      throw new ArgumentError.notNull('"link" can not be null');
-    }
-
+  ReadListItem({
+    @required String link,
+    String id,
+    String title,
+    bool isRead,
+    DateTime createdAt,
+    DateTime updatedAt,
+  }) {
     _id = id ?? Uuid().v1();
     _link = link;
     _title = title ?? link;
