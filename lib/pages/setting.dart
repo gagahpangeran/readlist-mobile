@@ -8,18 +8,18 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  String _apiKey;
-  String _gistId;
-  String _fileName;
+  final _apiKeyController = TextEditingController();
+  final _gistIdController = TextEditingController();
+  final _fileNameController = TextEditingController();
 
   Future<Setting> _futureSetting;
 
   void _saveSetting() {
     setState(() {
       _futureSetting = Setting.create(
-        apiKey: _apiKey,
-        gistId: _gistId,
-        fileName: _fileName,
+        apiKey: _apiKeyController.text,
+        gistId: _gistIdController.text,
+        fileName: _fileNameController.text,
       );
     });
     Navigator.pop(context);
@@ -32,8 +32,15 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   @override
+  void dispose() {
+    _apiKeyController.dispose();
+    _gistIdController.dispose();
+    _fileNameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print('build widget');
     return Scaffold(
       appBar: AppBar(
         title: Text('Set Up Gist Database'),
@@ -49,31 +56,31 @@ class _SettingPageState extends State<SettingPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    controller: _apiKeyController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.lock),
                       labelText: 'API Key',
                     ),
-                    onChanged: (value) => setState(() => _apiKey = value),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the API key' : null,
                     initialValue: setting.apiKey,
                   ),
                   TextFormField(
+                    controller: _gistIdController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.link),
                       labelText: 'Gist ID',
                     ),
-                    onChanged: (value) => setState(() => _gistId = value),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the Gist ID' : null,
                     initialValue: setting.gistId,
                   ),
                   TextFormField(
+                    controller: _fileNameController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.folder),
                       labelText: 'File Name',
                     ),
-                    onChanged: (value) => setState(() => _fileName = value),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the file name' : null,
                     initialValue: setting.fileName,
