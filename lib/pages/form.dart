@@ -9,14 +9,14 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  String _link;
-  String _title;
+  final _linkController = TextEditingController();
+  final _titleController = TextEditingController();
   bool _isRead = true;
 
   Future<bool> _submitForm() async {
     final readListItem = ReadListItem(
-      link: _link,
-      title: _title,
+      link: _linkController.text,
+      title: _titleController.text,
       isRead: _isRead,
     );
 
@@ -49,16 +49,16 @@ class _FormPageState extends State<FormPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextFormField(
+              controller: _linkController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.link),
                 labelText: 'Link',
               ),
-              onChanged: (value) => setState(() => _link = value),
               validator: (value) =>
                   value.isEmpty ? 'Please enter the link' : null,
             ),
             TextFormField(
-              onChanged: (value) => setState(() => _title = value),
+              controller: _titleController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.title),
                 labelText: 'Title',
