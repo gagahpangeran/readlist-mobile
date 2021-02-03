@@ -43,15 +43,18 @@ class GistAPI {
     );
 
     if (response.statusCode == 200) {
-      var content =
-          jsonDecode(response.body)['files'][setting.fileName]['content'];
-      List<dynamic> data = jsonDecode(content)['data'];
-
-      return data == null
-          ? []
-          : data.map((d) => ReadListItem.fromJson(d)).toList();
+      return _parseData(response.body, setting.fileName);
     } else {
       throw Exception('Failed to fetch data');
     }
+  }
+
+  List<ReadListItem> _parseData(String responseBody, String fileName) {
+    var content = jsonDecode(responseBody)['files'][fileName]['content'];
+    List<dynamic> data = jsonDecode(content)['data'];
+
+    return data == null
+        ? []
+        : data.map((d) => ReadListItem.fromJson(d)).toList();
   }
 }
