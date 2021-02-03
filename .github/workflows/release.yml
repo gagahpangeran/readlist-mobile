@@ -58,6 +58,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
+          body: All of these APK files are built automatically using Github Action and not signed. Install it with your own risk!
 
       - name: Download Artifact
         uses: actions/download-artifact@v2
