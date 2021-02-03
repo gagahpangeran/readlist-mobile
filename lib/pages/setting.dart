@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/models/setting.dart';
+import 'package:readlist/utils/helper.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -13,15 +14,27 @@ class _SettingPageState extends State<SettingPage> {
 
   Future<Setting> _futureSetting;
 
-  void _saveSetting() {
-    setState(() {
-      _futureSetting = Setting.create(
+  Future<bool> _saveSetting() async {
+    try {
+      await Setting.create(
         apiKey: _apiKeyController.text,
         gistId: _gistIdController.text,
         fileName: _fileNameController.text,
       );
-    });
-    Navigator.pop(context);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  _onSubmit() {
+    Helper.submitForm(
+      context: context,
+      submitFunction: _saveSetting,
+      onSubmitText: 'Saving settings...',
+      onSuccessText: 'Settings are saved',
+      onErrorText: 'Error! Can\'t save settings',
+    );
   }
 
   @override
@@ -86,7 +99,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   Center(
                     child: ElevatedButton(
-                      onPressed: _saveSetting,
+                      onPressed: _onSubmit,
                       child: Text('Save'),
                     ),
                   ),
