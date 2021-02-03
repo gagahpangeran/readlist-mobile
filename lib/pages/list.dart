@@ -21,16 +21,12 @@ class _ListPageState extends State<ListPage> {
 
   void _openForm() async {
     await Navigator.pushNamed(context, '/form');
-    setState(() {
-      _futureReadList = api.fetchData();
-    });
+    setState(() => _futureReadList = api.fetchData());
   }
 
   void _openSetting() async {
     await Navigator.pushNamed(context, '/setting');
-    setState(() {
-      _futureReadList = api.fetchData();
-    });
+    setState(() => _futureReadList = api.fetchData());
   }
 
   @override
@@ -40,12 +36,8 @@ class _ListPageState extends State<ListPage> {
         title: Text('Read List'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.refresh,
-            ),
-            onPressed: () => setState(() {
-              _futureReadList = api.fetchData();
-            }),
+            icon: Icon(Icons.refresh),
+            onPressed: () => setState(() => _futureReadList = api.fetchData()),
           ),
         ],
       ),
@@ -56,16 +48,13 @@ class _ListPageState extends State<ListPage> {
             var readList = snapshot.data;
 
             if (readList.length <= 0) {
-              return Center(
-                child: Text("No Data!"),
-              );
+              return Center(child: Text("No Data!"));
             }
 
             return ListView(
               children: readList
-                  .map((readListItem) => ListTile(
-                        title: Text(readListItem.title),
-                      ))
+                  .map((readListItem) =>
+                      ListTile(title: Text(readListItem.title)))
                   .toList(),
             );
           } else if (snapshot.hasError) {

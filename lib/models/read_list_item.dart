@@ -29,17 +29,17 @@ class ReadListItem {
   String get link => _link;
   String get title => _title;
   bool get isRead => _isRead;
-  String get createdAt => _createdAt.toString();
-  String get updatedAt => _updatedAt.toString();
+  String get createdAt => _createdAt.toIso8601String();
+  String get updatedAt => _updatedAt.toIso8601String();
 
   Map<String, dynamic> toMap() {
     return {
-      'id': _id,
-      'link': _link,
-      'title': _title,
-      'isRead': _isRead,
-      'createdAt': _createdAt.toIso8601String(),
-      'updatedAt': _updatedAt.toIso8601String(),
+      'id': id,
+      'link': link,
+      'title': title,
+      'isRead': isRead,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -55,12 +55,12 @@ class ReadListItem {
   @override
   String toString() {
     return '''ReadListItem {
-  id: $_id
-  link: $_link
-  title: $_title
-  isRead: $_isRead
-  createdAt: $_createdAt
-  updatedAt: $_updatedAt
+  id: $id
+  link: $link
+  title: $title
+  isRead: $isRead
+  createdAt: $createdAt
+  updatedAt: $updatedAt
 }''';
   }
 }

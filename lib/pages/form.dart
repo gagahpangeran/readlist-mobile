@@ -18,12 +18,15 @@ class _FormPageState extends State<FormPage> {
 
   _submitForm() async {
     setState(() => _isLoading = true);
-    final readListItem =
-        ReadListItem(link: _link, title: _title, isRead: _isRead);
+    final readListItem = ReadListItem(
+      link: _link,
+      title: _title,
+      isRead: _isRead,
+    );
     bool success = await api.submitData(readListItem);
 
     if (success) {
-      Navigator.pushNamed(context, '/list');
+      Navigator.pop(context);
     }
 
     setState(() => _isLoading = false);

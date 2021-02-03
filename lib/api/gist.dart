@@ -5,16 +5,15 @@ import 'package:readlist/models/read_list_item.dart';
 import 'package:readlist/models/setting.dart';
 
 class GistAPI {
-  String _apiEndpoint = 'https://api.github.com/gists';
+  final _apiEndpoint = 'https://api.github.com/gists';
 
   Future<bool> submitData(ReadListItem readListItem) async {
+    final setting = await Setting.load();
     final savedData = await fetchData();
-    savedData.add(readListItem);
 
+    savedData.add(readListItem);
     String jsonData =
         jsonEncode({'data': savedData.map((data) => data.toMap()).toList()});
-
-    final setting = await Setting.load();
 
     final response = await http.patch(
       '$_apiEndpoint/${setting.gistId}',
@@ -36,15 +35,16 @@ class GistAPI {
   Future<List<ReadListItem>> fetchData() async {
     final setting = await Setting.load();
 
-    final res = await http.get(
+    final response = await http.get(
       '$_apiEndpoint/${setting.gistId}',
       headers: {
         'Authorization': 'token ${setting.apiKey}',
       },
     );
 
-    if (res.statusCode == 200) {
-      var content = jsonDecode(res.body)['files'][setting.fileName]['content'];
+    if (response.statusCode == 200) {
+      var content =
+          jsonDecode(response.body)['files'][setting.fileName]['content'];
       List<dynamic> data = jsonDecode(content)['data'];
 
       return data == null

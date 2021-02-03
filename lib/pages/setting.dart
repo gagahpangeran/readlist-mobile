@@ -15,13 +15,13 @@ class _SettingPageState extends State<SettingPage> {
   Future<Setting> _futureSetting;
 
   void _saveSetting() {
-    setState(() => {
-          _futureSetting = Setting.create(
-            apiKey: _apiKey,
-            gistId: _gistId,
-            fileName: _fileName,
-          )
-        });
+    setState(() {
+      _futureSetting = Setting.create(
+        apiKey: _apiKey,
+        gistId: _gistId,
+        fileName: _fileName,
+      );
+    });
     Navigator.pop(context);
   }
 
@@ -35,56 +35,63 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     print('build widget');
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Set Up Gist Database'),
-        ),
-        body: FutureBuilder<Setting>(
-          future: _futureSetting,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              var setting = snapshot.data;
+      appBar: AppBar(
+        title: Text('Set Up Gist Database'),
+      ),
+      body: FutureBuilder<Setting>(
+        future: _futureSetting,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var setting = snapshot.data;
 
-              return Form(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.lock), labelText: 'API Key'),
-                      onChanged: (value) => setState(() => _apiKey = value),
-                      validator: (value) =>
-                          value.isEmpty ? 'Please enter the API key' : null,
-                      initialValue: setting.apiKey,
+            return Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'API Key',
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.link), labelText: 'Gist ID'),
-                      onChanged: (value) => setState(() => _gistId = value),
-                      validator: (value) =>
-                          value.isEmpty ? 'Please enter the Gist ID' : null,
-                      initialValue: setting.gistId,
+                    onChanged: (value) => setState(() => _apiKey = value),
+                    validator: (value) =>
+                        value.isEmpty ? 'Please enter the API key' : null,
+                    initialValue: setting.apiKey,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.link),
+                      labelText: 'Gist ID',
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.folder), labelText: 'File Name'),
-                      onChanged: (value) => setState(() => _fileName = value),
-                      validator: (value) =>
-                          value.isEmpty ? 'Please enter the file name' : null,
-                      initialValue: setting.fileName,
+                    onChanged: (value) => setState(() => _gistId = value),
+                    validator: (value) =>
+                        value.isEmpty ? 'Please enter the Gist ID' : null,
+                    initialValue: setting.gistId,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.folder),
+                      labelText: 'File Name',
                     ),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _saveSetting,
-                        child: Text('Save'),
-                      ),
+                    onChanged: (value) => setState(() => _fileName = value),
+                    validator: (value) =>
+                        value.isEmpty ? 'Please enter the file name' : null,
+                    initialValue: setting.fileName,
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _saveSetting,
+                      child: Text('Save'),
                     ),
-                  ],
-                ),
-              );
-            }
+                  ),
+                ],
+              ),
+            );
+          }
 
-            return LoadingScreen();
-          },
-        ));
+          return LoadingScreen();
+        },
+      ),
+    );
   }
 }
