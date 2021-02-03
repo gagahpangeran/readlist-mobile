@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class Helper {
   Helper._();
 
-  static SnackBar _buildSnackbar({
+  static SnackBar buildSnackbar({
     @required String text,
     void Function() action,
     String actionLabel,
@@ -26,9 +26,9 @@ class Helper {
     @required String onErrorText,
   }) async {
     final scaffold = ScaffoldMessenger.of(context);
-    final onSubmitSnackbar = _buildSnackbar(text: onSubmitText);
-    final onSuccessSnackbar = _buildSnackbar(text: onSuccessText);
-    final onErrorSnackbar = _buildSnackbar(
+    final onSubmitSnackbar = buildSnackbar(text: onSubmitText);
+    final onSuccessSnackbar = buildSnackbar(text: onSuccessText);
+    final onErrorSnackbar = buildSnackbar(
       text: onErrorText,
       action: () => scaffold.hideCurrentSnackBar(),
       actionLabel: 'Close',
