@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/components/loading_screen.dart';
 import 'package:readlist/models/setting.dart';
 
 class SettingPage extends StatefulWidget {
@@ -96,7 +95,7 @@ class _SettingPageState extends State<SettingPage> {
             );
           }
 
-          return LoadingScreen();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
