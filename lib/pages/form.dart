@@ -13,8 +13,6 @@ class _FormPageState extends State<FormPage> {
   String _title;
   bool _isRead = true;
 
-  GistAPI api = GistAPI();
-
   Future<bool> _submitForm() async {
     final readListItem = ReadListItem(
       link: _link,
@@ -23,7 +21,7 @@ class _FormPageState extends State<FormPage> {
     );
 
     try {
-      await api.submitData(readListItem);
+      await GistAPI.submitData(readListItem);
       return true;
     } catch (e) {
       return false;

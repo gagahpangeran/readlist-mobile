@@ -5,9 +5,12 @@ import 'package:readlist/models/read_list_item.dart';
 import 'package:readlist/models/setting.dart';
 
 class GistAPI {
-  final _apiEndpoint = 'https://api.github.com/gists';
+  static final _apiEndpoint = 'https://api.github.com/gists';
 
-  Future<List<ReadListItem>> submitData(ReadListItem readListItem) async {
+  GistAPI._();
+
+  static Future<List<ReadListItem>> submitData(
+      ReadListItem readListItem) async {
     final setting = await Setting.load();
     final savedData = await fetchData();
 
@@ -32,7 +35,7 @@ class GistAPI {
     }
   }
 
-  Future<List<ReadListItem>> fetchData() async {
+  static Future<List<ReadListItem>> fetchData() async {
     final setting = await Setting.load();
 
     final response = await http.get(
@@ -49,7 +52,7 @@ class GistAPI {
     }
   }
 
-  List<ReadListItem> _parseData(String responseBody, String fileName) {
+  static List<ReadListItem> _parseData(String responseBody, String fileName) {
     var content = jsonDecode(responseBody)['files'][fileName]['content'];
     List<dynamic> data = jsonDecode(content)['data'];
 

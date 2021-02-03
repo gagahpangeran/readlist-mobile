@@ -8,27 +8,25 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  GistAPI api = new GistAPI();
-
   Future<List<ReadListItem>> _futureReadList;
 
   @override
   void initState() {
     super.initState();
-    _futureReadList = api.fetchData();
+    _futureReadList = GistAPI.fetchData();
   }
 
   void _openForm() async {
     await Navigator.pushNamed(context, '/form');
     setState(() {
-      _futureReadList = api.fetchData();
+      _futureReadList = GistAPI.fetchData();
     });
   }
 
   void _openSetting() async {
     await Navigator.pushNamed(context, '/setting');
     setState(() {
-      _futureReadList = api.fetchData();
+      _futureReadList = GistAPI.fetchData();
     });
   }
 
@@ -41,7 +39,7 @@ class _ListPageState extends State<ListPage> {
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () => setState(() {
-              _futureReadList = api.fetchData();
+              _futureReadList = GistAPI.fetchData();
             }),
           ),
         ],
