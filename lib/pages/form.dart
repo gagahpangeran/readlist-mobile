@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
 import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/utils/helper.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -29,42 +30,14 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  Widget _buildSnackbar({
-    @required String text,
-    void Function() action,
-    String actionLabel,
-  }) {
-    return SnackBar(
-      content: Text(text),
-      behavior: SnackBarBehavior.floating,
-      action: action == null
-          ? null
-          : SnackBarAction(label: actionLabel, onPressed: action),
+  _onSubmit() {
+    Helper.submitForm(
+      context: context,
+      submitFunction: _submitForm,
+      onSubmitText: 'Submitting data...',
+      onSuccessText: 'Success submit data!',
+      onErrorText: 'Error! Can\'t submit data',
     );
-  }
-
-  _onSubmit() async {
-    final scaffold = ScaffoldMessenger.of(context);
-
-    final submitSnackbar = _buildSnackbar(text: 'Submitting data...');
-
-    final errorSnackbar = _buildSnackbar(
-      text: 'Error! Can\'t submit data',
-      action: () => scaffold.hideCurrentSnackBar(),
-      actionLabel: 'Close',
-    );
-
-    final successSnackbar = _buildSnackbar(text: 'Success submit data!');
-
-    scaffold.showSnackBar(submitSnackbar);
-    bool success = await _submitForm();
-    scaffold.hideCurrentSnackBar();
-    if (success) {
-      scaffold.showSnackBar(successSnackbar);
-      Navigator.pop(context);
-    } else {
-      scaffold.showSnackBar(errorSnackbar);
-    }
   }
 
   @override
