@@ -49,6 +49,9 @@ class _SettingPageState extends State<SettingPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var setting = snapshot.data;
+            _apiKeyController.text = setting.apiKey;
+            _gistIdController.text = setting.gistId;
+            _fileNameController.text = setting.fileName;
 
             return Form(
               child: Column(
@@ -62,7 +65,6 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the API key' : null,
-                    initialValue: setting.apiKey,
                   ),
                   TextFormField(
                     controller: _gistIdController,
@@ -72,7 +74,6 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the Gist ID' : null,
-                    initialValue: setting.gistId,
                   ),
                   TextFormField(
                     controller: _fileNameController,
@@ -82,7 +83,6 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     validator: (value) =>
                         value.isEmpty ? 'Please enter the file name' : null,
-                    initialValue: setting.fileName,
                   ),
                   Center(
                     child: ElevatedButton(
