@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
 
 class Helper {
   Helper._();
@@ -43,5 +45,11 @@ class Helper {
     } else {
       scaffold.showSnackBar(onErrorSnackbar);
     }
+  }
+
+  static Future<String> fetchTitle(String link) async {
+    final response = await http.get(link);
+    String title = parse(response.body).querySelector('title').text;
+    return title;
   }
 }
