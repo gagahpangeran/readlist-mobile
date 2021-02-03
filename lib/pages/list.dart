@@ -47,10 +47,14 @@ class _ListPageState extends State<ListPage> {
               return Center(child: Text("No Data!"));
             }
 
+            readList.sort((x, y) => y.updatedAt.compareTo(x.updatedAt));
+
             return ListView(
               children: readList
-                  .map((readListItem) =>
-                      ListTile(title: Text(readListItem.title)))
+                  .map((readListItem) => ListTile(
+                        minVerticalPadding: 16.0,
+                        title: Text(readListItem.title),
+                      ))
                   .toList(),
             );
           } else if (snapshot.hasError) {
