@@ -21,12 +21,16 @@ class _ListPageState extends State<ListPage> {
 
   void _openForm() async {
     await Navigator.pushNamed(context, '/form');
-    setState(() => _futureReadList = api.fetchData());
+    setState(() {
+      _futureReadList = api.fetchData();
+    });
   }
 
   void _openSetting() async {
     await Navigator.pushNamed(context, '/setting');
-    setState(() => _futureReadList = api.fetchData());
+    setState(() {
+      _futureReadList = api.fetchData();
+    });
   }
 
   @override
@@ -37,7 +41,9 @@ class _ListPageState extends State<ListPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.refresh),
-            onPressed: () => setState(() => _futureReadList = api.fetchData()),
+            onPressed: () => setState(() {
+              _futureReadList = api.fetchData();
+            }),
           ),
         ],
       ),
