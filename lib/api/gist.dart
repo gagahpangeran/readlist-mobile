@@ -7,7 +7,7 @@ import 'package:readlist/models/setting.dart';
 class GistAPI {
   final _apiEndpoint = 'https://api.github.com/gists';
 
-  Future<bool> submitData(ReadListItem readListItem) async {
+  Future<List<ReadListItem>> submitData(ReadListItem readListItem) async {
     final setting = await Setting.load();
     final savedData = await fetchData();
 
@@ -26,9 +26,9 @@ class GistAPI {
     );
 
     if (response.statusCode == 200) {
-      return true;
+      return _parseData(response.body, setting.fileName);
     } else {
-      return false;
+      throw Exception('Failed to submit data');
     }
   }
 
