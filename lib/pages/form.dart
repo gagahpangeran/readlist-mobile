@@ -38,6 +38,13 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
+  _fetchTitle() async {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(Helper.buildSnackbar(text: 'Getting title...'));
+    _titleController.text = await Helper.fetchTitle(_linkController.text);
+    scaffold.hideCurrentSnackBar();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +63,7 @@ class _FormPageState extends State<FormPage> {
               ),
               validator: (value) =>
                   value.isEmpty ? 'Please enter the link' : null,
+              onEditingComplete: _fetchTitle,
             ),
             TextFormField(
               controller: _titleController,
