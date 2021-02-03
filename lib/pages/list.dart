@@ -16,15 +16,8 @@ class _ListPageState extends State<ListPage> {
     _futureReadList = GistAPI.fetchData();
   }
 
-  void _openForm() async {
-    await Navigator.pushNamed(context, '/form');
-    setState(() {
-      _futureReadList = GistAPI.fetchData();
-    });
-  }
-
-  void _openSetting() async {
-    await Navigator.pushNamed(context, '/setting');
+  void _openView(String route) async {
+    await Navigator.pushNamed(context, route);
     setState(() {
       _futureReadList = GistAPI.fetchData();
     });
@@ -68,7 +61,7 @@ class _ListPageState extends State<ListPage> {
                   Text("Error when fetching data!"),
                   Text("Make sure you already set up you setting."),
                   ElevatedButton(
-                    onPressed: _openSetting,
+                    onPressed: () => _openView('/setting'),
                     child: Text('Open Setting'),
                   ),
                 ],
@@ -87,14 +80,14 @@ class _ListPageState extends State<ListPage> {
               title: Text('Setting'),
               onTap: () {
                 Navigator.pop(context);
-                _openSetting();
+                _openView('/setting');
               },
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _openForm,
+        onPressed: () => _openView('/form'),
         tooltip: 'Add New List',
         child: Icon(Icons.add),
       ),
