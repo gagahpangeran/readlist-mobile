@@ -29,8 +29,8 @@ class ReadListItem {
   String get link => _link;
   String get title => _title;
   bool get isRead => _isRead;
-  String get createdAt => _createdAt.toIso8601String();
-  String get updatedAt => _updatedAt.toIso8601String();
+  DateTime get createdAt => _createdAt;
+  DateTime get updatedAt => _updatedAt;
 
   Map<String, dynamic> toMap() {
     return {
@@ -38,8 +38,8 @@ class ReadListItem {
       'link': link,
       'title': title,
       'isRead': isRead,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
     };
   }
 
@@ -59,8 +59,8 @@ class ReadListItem {
   link: $link
   title: $title
   isRead: $isRead
-  createdAt: $createdAt
-  updatedAt: $updatedAt
+  createdAt: ${createdAt.toLocal()}
+  updatedAt: ${updatedAt.toLocal()}
 }''';
   }
 }
