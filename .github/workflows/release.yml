@@ -9,8 +9,10 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Master
+      - name: Checkout Tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
 
       - name: Flutter Cache
         id: flutter-cache
@@ -49,8 +51,10 @@ jobs:
     name: Release APK
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Master
+      - name: Checkout Tag
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
 
       - name: Create Release
         id: create_release
