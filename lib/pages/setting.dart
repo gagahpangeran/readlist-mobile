@@ -9,6 +9,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final _formKey = GlobalKey<FormState>();
   final _apiKeyController = TextEditingController();
   final _gistIdController = TextEditingController();
   final _fileNameController = TextEditingController();
@@ -29,13 +30,15 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   _onSubmit() {
-    Helper.submitForm(
-      context: context,
-      submitFunction: _saveSetting,
-      onSubmitText: 'Saving settings...',
-      onSuccessText: 'Settings are saved',
-      onErrorText: 'Error! Can\'t save settings',
-    );
+    if (_formKey.currentState.validate()) {
+      Helper.submitForm(
+        context: context,
+        submitFunction: _saveSetting,
+        onSubmitText: 'Saving settings...',
+        onSuccessText: 'Settings are saved',
+        onErrorText: 'Error! Can\'t save settings',
+      );
+    }
   }
 
   @override
@@ -67,6 +70,7 @@ class _SettingPageState extends State<SettingPage> {
             _fileNameController.text = setting.fileName;
 
             return Form(
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

@@ -10,6 +10,7 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
+  final _formKey = GlobalKey<FormState>();
   final _linkController = TextEditingController();
   final _titleController = TextEditingController();
   bool _isRead = true;
@@ -30,13 +31,15 @@ class _FormPageState extends State<FormPage> {
   }
 
   _onSubmit() {
-    Helper.submitForm(
-      context: context,
-      submitFunction: _submitForm,
-      onSubmitText: 'Submitting data...',
-      onSuccessText: 'Success submit data!',
-      onErrorText: 'Error! Can\'t submit data',
-    );
+    if (_formKey.currentState.validate()) {
+      Helper.submitForm(
+        context: context,
+        submitFunction: _submitForm,
+        onSubmitText: 'Submitting data...',
+        onSuccessText: 'Success submit data!',
+        onErrorText: 'Error! Can\'t submit data',
+      );
+    }
   }
 
   _fetchTitle() async {
@@ -53,6 +56,7 @@ class _FormPageState extends State<FormPage> {
         title: Text('Add New List'),
       ),
       body: Form(
+        key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
