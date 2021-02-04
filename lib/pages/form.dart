@@ -51,6 +51,22 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textInputData = [
+      {
+        'controller': _linkController,
+        'icon': Icon(Icons.link),
+        'labelText': 'Link',
+        'validator': true,
+        'onPaste': _fetchTitle,
+        'onEditingComplete': _fetchTitle,
+      },
+      {
+        'controller': _titleController,
+        'icon': Icon(Icons.title),
+        'labelText': 'Title',
+      }
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add New List'),
@@ -60,19 +76,16 @@ class _FormPageState extends State<FormPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            CustomInputText(
-              controller: _linkController,
-              icon: Icon(Icons.link),
-              labelText: 'Link',
-              validator: true,
-              onPaste: _fetchTitle,
-              onEditingComplete: _fetchTitle,
-            ),
-            CustomInputText(
-              controller: _titleController,
-              icon: Icon(Icons.title),
-              labelText: 'Title',
-            ),
+            ...textInputData
+                .map((data) => CustomInputText(
+                      controller: data['controller'],
+                      icon: data['icon'],
+                      labelText: data['labelText'],
+                      validator: data['validator'] ?? false,
+                      onPaste: data['onPaste'],
+                      onEditingComplete: data['onEditingComplete'],
+                    ))
+                .toList(),
             Row(
               children: <Widget>[
                 Checkbox(

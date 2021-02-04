@@ -66,35 +66,45 @@ class _SettingPageState extends State<SettingPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var setting = snapshot.data;
-            _gistIdController.text = setting.gistId;
-            _fileNameController.text = setting.fileName;
+
+            final textInputData = [
+              {
+                'controller': _apiKeyController,
+                'icon': Icon(Icons.lock),
+                'labelText': 'API Key',
+                'validator': true,
+                'initialValue': setting.apiKey,
+              },
+              {
+                'controller': _gistIdController,
+                'icon': Icon(Icons.link),
+                'labelText': 'Gist ID',
+                'validator': true,
+                'initialValue': setting.gistId,
+              },
+              {
+                'controller': _fileNameController,
+                'icon': Icon(Icons.folder),
+                'labelText': 'File Name',
+                'validator': true,
+                'initialValue': setting.fileName,
+              }
+            ];
 
             return Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  CustomInputText(
-                    controller: _apiKeyController,
-                    icon: Icon(Icons.lock),
-                    labelText: 'API Key',
-                    validator: true,
-                    initialValue: setting.apiKey,
-                  ),
-                  CustomInputText(
-                    controller: _gistIdController,
-                    icon: Icon(Icons.link),
-                    labelText: 'Gist ID',
-                    validator: true,
-                    initialValue: setting.gistId,
-                  ),
-                  CustomInputText(
-                    controller: _fileNameController,
-                    icon: Icon(Icons.folder),
-                    labelText: 'File Name',
-                    validator: true,
-                    initialValue: setting.fileName,
-                  ),
+                  ...textInputData
+                      .map((data) => CustomInputText(
+                            controller: data['controller'],
+                            icon: data['icon'],
+                            labelText: data['labelText'],
+                            validator: data['validator'],
+                            initialValue: data['initialValue'],
+                          ))
+                      .toList(),
                   Center(
                     child: ElevatedButton(
                       onPressed: _onSubmit,
