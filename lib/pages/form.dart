@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
+import 'package:readlist/components/custom_input_text.dart';
 import 'package:readlist/models/read_list_item.dart';
 import 'package:readlist/utils/helper.dart';
 
@@ -55,22 +56,18 @@ class _FormPageState extends State<FormPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextFormField(
+            CustomInputText(
               controller: _linkController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.link),
-                labelText: 'Link',
-              ),
-              validator: (value) =>
-                  value.isEmpty ? 'Please enter the link' : null,
+              icon: Icon(Icons.link),
+              labelText: 'Link',
+              validator: true,
+              onPaste: _fetchTitle,
               onEditingComplete: _fetchTitle,
             ),
-            TextFormField(
+            CustomInputText(
               controller: _titleController,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.title),
-                labelText: 'Title',
-              ),
+              icon: Icon(Icons.title),
+              labelText: 'Title',
             ),
             Row(
               children: <Widget>[
