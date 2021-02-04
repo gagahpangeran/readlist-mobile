@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
+import 'package:readlist/components/read_list_tile.dart';
 import 'package:readlist/models/read_list_item.dart';
 
 class ListPage extends StatefulWidget {
@@ -55,16 +56,7 @@ class _ListPageState extends State<ListPage> {
 
             return ListView(
               children: readList
-                  .map((readListItem) => ListTile(
-                        minVerticalPadding: 16.0,
-                        title: Text(readListItem.title),
-                        trailing: readListItem.isRead
-                            ? Icon(
-                                Icons.check,
-                                color: Colors.blue,
-                              )
-                            : null,
-                      ))
+                  .map((readListItem) => ReadListTile(readListItem))
                   .toList(),
             );
           } else if (snapshot.hasError) {
