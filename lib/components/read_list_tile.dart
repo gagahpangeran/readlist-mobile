@@ -25,16 +25,11 @@ class _ReadListTileState extends State<ReadListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      tileColor: widget.item.isRead ? null : Colors.red[100],
       minVerticalPadding: 16.0,
       title: Text(widget.item.title),
       subtitle: Text("""Updated At : ${format.format(widget.item.updatedAt)}
 Created At : ${format.format(widget.item.createdAt)}"""),
-      trailing: widget.item.isRead
-          ? Icon(
-              Icons.check,
-              color: Colors.blue,
-            )
-          : null,
       onTap: _launchLink,
     );
   }
