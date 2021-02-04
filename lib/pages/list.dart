@@ -58,6 +58,12 @@ class _ListPageState extends State<ListPage> {
                   .map((readListItem) => ListTile(
                         minVerticalPadding: 16.0,
                         title: Text(readListItem.title),
+                        trailing: readListItem.isRead
+                            ? Icon(
+                                Icons.check,
+                                color: Colors.blue,
+                              )
+                            : null,
                       ))
                   .toList(),
             );
