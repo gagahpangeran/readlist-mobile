@@ -30,6 +30,10 @@ class _ListPageState extends State<ListPage> {
         title: Text('Read List'),
         actions: <Widget>[
           IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => _openView('/setting'),
+          ),
+          IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () => setState(() {
               _futureReadList = GistAPI.fetchData();
@@ -75,20 +79,6 @@ class _ListPageState extends State<ListPage> {
 
           return Center(child: CircularProgressIndicator());
         },
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            ListTile(
-              title: Text('Setting'),
-              onTap: () {
-                Navigator.pop(context);
-                _openView('/setting');
-              },
-            ),
-          ],
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openView('/form'),
