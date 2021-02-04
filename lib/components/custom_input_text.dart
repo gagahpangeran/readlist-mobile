@@ -21,7 +21,8 @@ class CustomInputText extends StatefulWidget {
     this.onEditingComplete,
     this.validator = false,
   }) {
-    this.controller.text = this.initialValue;
+    assert(controller != null);
+    controller.text = initialValue;
   }
 
   @override
