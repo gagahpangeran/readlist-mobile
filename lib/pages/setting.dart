@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readlist/components/custom_input_text.dart';
 import 'package:readlist/models/setting.dart';
 import 'package:readlist/utils/helper.dart';
 
@@ -62,7 +63,6 @@ class _SettingPageState extends State<SettingPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var setting = snapshot.data;
-            _apiKeyController.text = setting.apiKey;
             _gistIdController.text = setting.gistId;
             _fileNameController.text = setting.fileName;
 
@@ -70,32 +70,26 @@ class _SettingPageState extends State<SettingPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  TextFormField(
+                  CustomInputText(
                     controller: _apiKeyController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.lock),
-                      labelText: 'API Key',
-                    ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Please enter the API key' : null,
+                    icon: Icon(Icons.lock),
+                    labelText: 'API Key',
+                    validator: true,
+                    initialValue: setting.apiKey,
                   ),
-                  TextFormField(
+                  CustomInputText(
                     controller: _gistIdController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.link),
-                      labelText: 'Gist ID',
-                    ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Please enter the Gist ID' : null,
+                    icon: Icon(Icons.link),
+                    labelText: 'Gist ID',
+                    validator: true,
+                    initialValue: setting.gistId,
                   ),
-                  TextFormField(
+                  CustomInputText(
                     controller: _fileNameController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.folder),
-                      labelText: 'File Name',
-                    ),
-                    validator: (value) =>
-                        value.isEmpty ? 'Please enter the file name' : null,
+                    icon: Icon(Icons.folder),
+                    labelText: 'File Name',
+                    validator: true,
+                    initialValue: setting.fileName,
                   ),
                   Center(
                     child: ElevatedButton(
