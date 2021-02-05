@@ -25,37 +25,41 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
+  Widget _buildMainAppBar() {
+    return AppBar(
+      title: Text('Read List'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.sort),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => SortFilterDialog(),
+            );
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () => _openView('/setting'),
+        ),
+        IconButton(
+          icon: Icon(Icons.refresh),
+          onPressed: () => setState(() {
+            _futureReadList = GistAPI.fetchData();
+          }),
+        ),
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Read List'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.sort),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => SortFilterDialog(),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () => _openView('/setting'),
-          ),
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => setState(() {
-              _futureReadList = GistAPI.fetchData();
-            }),
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: _buildMainAppBar(),
       body: FutureBuilder<List<ReadListItem>>(
         future: _futureReadList,
         builder: (context, snapshot) {
