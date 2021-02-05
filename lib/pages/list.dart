@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readlist/api/gist.dart';
 import 'package:readlist/components/read_list_tile.dart';
+import 'package:readlist/components/sort_filter_dialog.dart';
 import 'package:readlist/models/read_list_item.dart';
 
 class ListPage extends StatefulWidget {
@@ -30,6 +31,15 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(
         title: Text('Read List'),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => SortFilterDialog(),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () => _openView('/setting'),
