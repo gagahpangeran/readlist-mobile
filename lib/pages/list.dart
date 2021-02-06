@@ -3,6 +3,7 @@ import 'package:readlist/api/gist.dart';
 import 'package:readlist/components/read_list_tile.dart';
 import 'package:readlist/components/sort_filter_dialog.dart';
 import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/utils/sort_filter.dart';
 
 class ListPage extends StatefulWidget {
   @override
@@ -11,6 +12,16 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   Future<List<ReadListItem>> _futureReadList;
+  Map<String, Object> _sortParameter = {
+    'sortOrder': SortFilter.defaultSortOrder,
+    'sortBy': SortFilter.defaultSortBy,
+  };
+
+  _updateSortParameter(Map<String, Object> sortParameter) {
+    setState(() {
+      _sortParameter = sortParameter;
+    });
+  }
 
   @override
   void initState() {
@@ -34,7 +45,7 @@ class _ListPageState extends State<ListPage> {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => SortFilterDialog(),
+              builder: (context) => SortFilterDialog(_updateSortParameter),
             );
           },
         ),
@@ -70,10 +81,14 @@ class _ListPageState extends State<ListPage> {
               return Center(child: Text("No Data!"));
             }
 
-            readList.sort((x, y) => y.updatedAt.compareTo(x.updatedAt));
+            var sortedReadList = SortFilter.sort(
+              readList,
+              _sortParameter['sortBy'],
+              _sortParameter['sortOrder'],
+            );
 
             return ListView(
-              children: readList
+              children: sortedReadList
                   .map((readListItem) => ReadListTile(readListItem))
                   .toList(),
             );
