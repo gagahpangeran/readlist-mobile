@@ -1,27 +1,25 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:readlist/models/sort_filter.dart';
 
 class SortFilterDialog extends StatefulWidget {
   final void Function(SortFilter) updateSortParameter;
-  final SortFilter initialSortParameter;
+  final SortFilter initialParam;
 
-  SortFilterDialog(this.updateSortParameter, this.initialSortParameter);
+  SortFilterDialog(this.updateSortParameter, this.initialParam);
 
   @override
   _SortFilterDialogState createState() => _SortFilterDialogState();
 }
 
 class _SortFilterDialogState extends State<SortFilterDialog> {
-  SortBy _sortBy;
-  SortOrder _sortOrder;
-  String _isRead;
+  SortFilter _param;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _sortBy = widget.initialSortParameter.sortBy;
-      _sortOrder = widget.initialSortParameter.sortOrder;
+      _param = widget.initialParam;
     });
   }
 
@@ -35,13 +33,13 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
         ),
         SimpleDialogOption(
           child: DropdownButton<SortBy>(
-            value: _sortBy,
+            value: _param.sortBy,
             underline: Container(
               height: 2,
               color: Colors.blue,
             ),
             onChanged: (newValue) => setState(() {
-              _sortBy = newValue;
+              _param.sortBy = newValue;
             }),
             items: <SortBy>[...SortBy.values]
                 .map((value) => DropdownMenuItem(
@@ -53,26 +51,23 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
         ),
         SimpleDialogOption(
           child: Wrap(
-            alignment: WrapAlignment.spaceAround,
-            children: <Widget>[
-              ChoiceChip(
-                label: Text('Asc'),
-                selected: _sortOrder == SortOrder.Asc,
-                onSelected: (_) => setState(() {
-                  _sortOrder = SortOrder.Asc;
-                }),
-                avatar: Icon(Icons.arrow_downward),
-              ),
-              ChoiceChip(
-                label: Text('Desc'),
-                selected: _sortOrder == SortOrder.Desc,
-                onSelected: (_) => setState(() {
-                  _sortOrder = SortOrder.Desc;
-                }),
-                avatar: Icon(Icons.arrow_upward),
-              ),
-            ],
-          ),
+              alignment: WrapAlignment.spaceAround,
+              children: <SortOrder>[...SortOrder.values]
+                  .map(
+                    (value) => ChoiceChip(
+                      label: Text(describeEnum(value)),
+                      selected: _param.sortOrder == value,
+                      onSelected: (_) => setState(() {
+                        _param.sortOrder = value;
+                      }),
+                      avatar: Icon(
+                        value.number == 1
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward,
+                      ),
+                    ),
+                  )
+                  .toList()),
         ),
         SimpleDialogOption(
           child: Text('Filter by'),
@@ -83,22 +78,21 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
             children: <Widget>[
               ChoiceChip(
                 label: Text('Read'),
-                selected: _isRead == 'read',
-                onSelected: (_) {
-                  setState(() {
-                    _isRead = _isRead == 'read' ? null : 'read';
-                  });
-                },
+                selected: _param.isRead == IsRead.Read,
+                onSelected: (_) => setState(() {
+                  _param.isRead =
+                      _param.isRead == IsRead.Read ? IsRead.None : IsRead.Read;
+                }),
                 avatar: Icon(Icons.check),
               ),
               ChoiceChip(
                 label: Text('Unread'),
-                selected: _isRead == 'unread',
-                onSelected: (_) {
-                  setState(() {
-                    _isRead = _isRead == 'unread' ? null : 'unread';
-                  });
-                },
+                selected: _param.isRead == IsRead.UnRead,
+                onSelected: (_) => setState(() {
+                  _param.isRead = _param.isRead == IsRead.UnRead
+                      ? IsRead.None
+                      : IsRead.UnRead;
+                }),
                 avatar: Icon(Icons.close),
               ),
             ],
@@ -106,14 +100,11 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
         ),
         SimpleDialogOption(
           child: OutlineButton(
-            onPressed: () {
-              setState(() {
-                _sortOrder = SortFilter.defaultSortOrder;
-                _sortBy = SortFilter.defaultSortBy;
-              });
-            },
             child: Text('Reset all to default'),
             textColor: Colors.red,
+            onPressed: () => setState(() {
+              _param = SortFilter();
+            }),
           ),
         ),
         SimpleDialogOption(
@@ -128,10 +119,7 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  widget.updateSortParameter(SortFilter(
-                    sortBy: _sortBy,
-                    sortOrder: _sortOrder,
-                  ));
+                  widget.updateSortParameter(_param);
                   Navigator.pop(context);
                 },
                 child: Text('Apply'),

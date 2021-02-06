@@ -4,7 +4,7 @@ import 'package:readlist/components/read_list_tile.dart';
 import 'package:readlist/components/sort_filter_dialog.dart';
 import 'package:readlist/models/read_list_item.dart';
 import 'package:readlist/utils/helper.dart';
-import 'package:readlist/utils/sort_filter.dart';
+import 'package:readlist/models/sort_filter.dart';
 
 class ListPage extends StatefulWidget {
   @override
@@ -13,11 +13,11 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   Future<List<ReadListItem>> _futureReadList;
-  SortFilter _sortParameter = SortFilter();
+  SortFilter _sortFilterParam = SortFilter();
 
   _updateSortParameter(SortFilter value) {
     setState(() {
-      _sortParameter = value;
+      _sortFilterParam = value;
     });
   }
 
@@ -44,7 +44,7 @@ class _ListPageState extends State<ListPage> {
             showDialog(
               context: context,
               builder: (context) =>
-                  SortFilterDialog(_updateSortParameter, _sortParameter),
+                  SortFilterDialog(_updateSortParameter, _sortFilterParam),
             );
           },
         ),
