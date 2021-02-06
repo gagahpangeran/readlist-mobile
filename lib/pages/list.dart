@@ -12,14 +12,11 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   Future<List<ReadListItem>> _futureReadList;
-  Map<String, Object> _sortParameter = {
-    'sortOrder': SortFilter.defaultSortOrder,
-    'sortBy': SortFilter.defaultSortBy,
-  };
+  SortFilter _sortParameter = SortFilter();
 
-  _updateSortParameter(Map<String, Object> sortParameter) {
+  _updateSortParameter(SortFilter value) {
     setState(() {
-      _sortParameter = sortParameter;
+      _sortParameter = value;
     });
   }
 
@@ -45,7 +42,8 @@ class _ListPageState extends State<ListPage> {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => SortFilterDialog(_updateSortParameter),
+              builder: (context) =>
+                  SortFilterDialog(_updateSortParameter, _sortParameter),
             );
           },
         ),
@@ -81,11 +79,7 @@ class _ListPageState extends State<ListPage> {
               return Center(child: Text("No Data!"));
             }
 
-            var sortedReadList = SortFilter.sort(
-              readList,
-              _sortParameter['sortBy'],
-              _sortParameter['sortOrder'],
-            );
+            var sortedReadList = SortFilter.sort(readList, _sortParameter);
 
             return ListView(
               children: sortedReadList

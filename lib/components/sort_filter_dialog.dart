@@ -2,18 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:readlist/utils/sort_filter.dart';
 
 class SortFilterDialog extends StatefulWidget {
-  final void Function(Map<String, Object>) updateSortParameter;
+  final void Function(SortFilter) updateSortParameter;
+  final SortFilter initialSortParameter;
 
-  SortFilterDialog(this.updateSortParameter);
+  SortFilterDialog(this.updateSortParameter, this.initialSortParameter);
 
   @override
   _SortFilterDialogState createState() => _SortFilterDialogState();
 }
 
 class _SortFilterDialogState extends State<SortFilterDialog> {
-  SortBy _sortBy = SortFilter.defaultSortBy;
-  SortOrder _sortOrder = SortFilter.defaultSortOrder;
+  SortBy _sortBy;
+  SortOrder _sortOrder;
   String _isRead;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _sortBy = widget.initialSortParameter.sortBy;
+      _sortOrder = widget.initialSortParameter.sortOrder;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +106,12 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
         ),
         SimpleDialogOption(
           child: OutlineButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                _sortOrder = SortFilter.defaultSortOrder;
+                _sortBy = SortFilter.defaultSortBy;
+              });
+            },
             child: Text('Reset all to default'),
             textColor: Colors.red,
           ),
@@ -113,10 +128,10 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  widget.updateSortParameter({
-                    'sortOrder': _sortOrder,
-                    'sortBy': _sortBy,
-                  });
+                  widget.updateSortParameter(SortFilter(
+                    sortBy: _sortBy,
+                    sortOrder: _sortOrder,
+                  ));
                   Navigator.pop(context);
                 },
                 child: Text('Apply'),

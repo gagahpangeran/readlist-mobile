@@ -30,11 +30,12 @@ class SortFilter {
 
   static List<ReadListItem> sort(
     List<ReadListItem> readList,
-    SortBy sortBy,
-    SortOrder sortOrder,
+    SortFilter sortParameter,
   ) {
     var newReadList = [...readList];
-    newReadList.sort(_getComparator(sortBy, sortOrder));
+    var comparator =
+        _getComparator(sortParameter.sortBy, sortParameter.sortOrder);
+    newReadList.sort(comparator);
     return newReadList;
   }
 }
