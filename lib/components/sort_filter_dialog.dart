@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:readlist/utils/sort_filter.dart';
 
@@ -37,7 +36,7 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
             items: <SortBy>[...SortBy.values]
                 .map((value) => DropdownMenuItem(
                       value: value,
-                      child: Text(describeEnum(value)),
+                      child: Text(value.text),
                     ))
                 .toList(),
           ),
@@ -48,17 +47,17 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
             children: <Widget>[
               ChoiceChip(
                 label: Text('Asc'),
-                selected: _sortOrder == SortOrder.asc,
+                selected: _sortOrder == SortOrder.Asc,
                 onSelected: (_) => setState(() {
-                  _sortOrder = SortOrder.asc;
+                  _sortOrder = SortOrder.Asc;
                 }),
                 avatar: Icon(Icons.arrow_downward),
               ),
               ChoiceChip(
                 label: Text('Desc'),
-                selected: _sortOrder == SortOrder.desc,
+                selected: _sortOrder == SortOrder.Desc,
                 onSelected: (_) => setState(() {
-                  _sortOrder = SortOrder.desc;
+                  _sortOrder = SortOrder.Desc;
                 }),
                 avatar: Icon(Icons.arrow_upward),
               ),
