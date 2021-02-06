@@ -39,19 +39,21 @@ class ReadListItem {
       'link': link,
       'title': title,
       'isRead': isRead,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
-  factory ReadListItem.fromJson(Map<String, dynamic> json) => new ReadListItem(
-        id: json['id'],
-        link: json['link'],
-        title: json['title'],
-        isRead: json['isRead'],
-        createdAt: DateTime.parse(json['createdAt']),
-        updatedAt: DateTime.parse(json['updatedAt']),
-      );
+  factory ReadListItem.fromJson(Map<String, dynamic> json) {
+    return new ReadListItem(
+      id: json['id'],
+      link: json['link'],
+      title: json['title'],
+      isRead: json['isRead'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
+  }
 
   @override
   String toString() {
