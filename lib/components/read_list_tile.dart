@@ -30,11 +30,13 @@ class _ReadListTileState extends State<ReadListTile> {
       title: Text(widget.item.title),
       subtitle: Text("""Updated At : ${format.format(widget.item.updatedAt)}
 Created At : ${format.format(widget.item.createdAt)}"""),
-      trailing: Icon(
-        Icons.open_in_new,
-        color: Colors.blue,
+      trailing: IconButton(
+        icon: Icon(
+          Icons.open_in_new,
+          color: Colors.blue,
+        ),
+        onPressed: _launchLink,
       ),
-      onTap: _launchLink,
     );
   }
 }
