@@ -65,4 +65,15 @@ class Helper {
     newList.sort(comparator);
     return newList;
   }
+
+  static List<ReadListItem> advancedFilter(
+    List<ReadListItem> list,
+    SortFilter filterParam,
+  ) {
+    if (filterParam.isRead.val == null) {
+      return list;
+    }
+
+    return list.where((item) => item.isRead == filterParam.isRead.val).toList();
+  }
 }
