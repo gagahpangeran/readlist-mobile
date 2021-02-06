@@ -4,20 +4,21 @@ import 'package:readlist/models/read_list_item.dart';
 class SortFilter {
   static final defaultSortBy = SortBy.UpdatedAt;
   static final defaultSortOrder = SortOrder.Desc;
+  static final defaultIsRead = IsRead.None;
 
-  SortBy _sortBy;
-  SortOrder _sortOrder;
+  SortBy sortBy;
+  SortOrder sortOrder;
+  IsRead isRead;
 
   SortFilter({
     SortBy sortBy,
     SortOrder sortOrder,
+    IsRead isRead,
   }) {
-    _sortBy = sortBy ?? defaultSortBy;
-    _sortOrder = sortOrder ?? defaultSortOrder;
+    this.sortBy = sortBy ?? defaultSortBy;
+    this.sortOrder = sortOrder ?? defaultSortOrder;
+    this.isRead = isRead ?? defaultIsRead;
   }
-
-  SortBy get sortBy => _sortBy;
-  SortOrder get sortOrder => _sortOrder;
 
   static int Function(ReadListItem, ReadListItem) getComparator(
     SortBy sortBy,
