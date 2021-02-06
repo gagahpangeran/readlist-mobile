@@ -63,3 +63,17 @@ enum IsRead {
   UnRead,
   None,
 }
+
+extension IsReadValue on IsRead {
+  bool get val {
+    switch (this) {
+      case IsRead.Read:
+        return true;
+      case IsRead.UnRead:
+        return false;
+      case IsRead.None:
+      default:
+        return null;
+    }
+  }
+}
