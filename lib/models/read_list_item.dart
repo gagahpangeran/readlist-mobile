@@ -33,6 +33,15 @@ class ReadListItem {
   DateTime get createdAt => _createdAt;
   DateTime get updatedAt => _updatedAt;
 
+  dynamic getValue(String property) {
+    var propList = ['id', 'link', 'title', 'isRead', 'createdAt', 'updatedAt'];
+    if (!propList.contains(property)) {
+      throw ArgumentError.value("No such property in this object");
+    }
+
+    return this.toMap()[property];
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
