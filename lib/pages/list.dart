@@ -80,10 +80,12 @@ class _ListPageState extends State<ListPage> {
               return Center(child: Text("No Data!"));
             }
 
-            var sortedReadList = Helper.immutableSort(readList, _sortParameter);
+            var sortedList = Helper.immutableSort(readList, _sortFilterParam);
+            var filteredList =
+                Helper.advancedFilter(sortedList, _sortFilterParam);
 
             return ListView(
-              children: sortedReadList
+              children: filteredList
                   .map((readListItem) => ReadListTile(readListItem))
                   .toList(),
             );
