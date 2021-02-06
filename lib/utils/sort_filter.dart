@@ -5,6 +5,20 @@ class SortFilter {
   static final defaultSortBy = SortBy.UpdatedAt;
   static final defaultSortOrder = SortOrder.Desc;
 
+  SortBy _sortBy;
+  SortOrder _sortOrder;
+
+  SortFilter({
+    SortBy sortBy,
+    SortOrder sortOrder,
+  }) {
+    _sortBy = sortBy ?? defaultSortBy;
+    _sortOrder = sortOrder ?? defaultSortOrder;
+  }
+
+  SortBy get sortBy => _sortBy;
+  SortOrder get sortOrder => _sortOrder;
+
   static int Function(ReadListItem, ReadListItem) _getComparator(
     SortBy sortBy,
     SortOrder sortOrder,
