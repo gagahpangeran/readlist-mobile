@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadListItem {
@@ -17,9 +17,10 @@ class ReadListItem {
     DateTime createdAt,
     DateTime updatedAt,
   }) {
+    assert(link != null);
     _id = id ?? Uuid().v1();
     _link = link;
-    _title = title ?? link;
+    _title = title == null || title.isEmpty ? link : title;
     _isRead = isRead ?? true;
     _createdAt = createdAt ?? new DateTime.now();
     _updatedAt = updatedAt ?? _createdAt;
