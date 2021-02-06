@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/utils/sort_filter.dart';
+import 'package:readlist/models/sort_filter.dart';
 
 class SortFilterDialog extends StatefulWidget {
   final void Function(SortFilter) updateSortParameter;

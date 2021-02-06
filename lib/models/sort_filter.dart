@@ -19,24 +19,13 @@ class SortFilter {
   SortBy get sortBy => _sortBy;
   SortOrder get sortOrder => _sortOrder;
 
-  static int Function(ReadListItem, ReadListItem) _getComparator(
+  static int Function(ReadListItem, ReadListItem) getComparator(
     SortBy sortBy,
     SortOrder sortOrder,
   ) {
     return (ReadListItem x, ReadListItem y) =>
         sortOrder.number *
         x.getValue(sortBy.val).compareTo(y.getValue(sortBy.val));
-  }
-
-  static List<ReadListItem> sort(
-    List<ReadListItem> readList,
-    SortFilter sortParameter,
-  ) {
-    var newReadList = [...readList];
-    var comparator =
-        _getComparator(sortParameter.sortBy, sortParameter.sortOrder);
-    newReadList.sort(comparator);
-    return newReadList;
   }
 }
 

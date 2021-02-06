@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:readlist/models/read_list_item.dart';
-import 'package:readlist/utils/sort_filter.dart';
+import 'package:readlist/models/sort_filter.dart';
 
 class Helper {
   Helper._();
