@@ -56,3 +56,9 @@ enum SortOrder {
 extension SortOrderValue on SortOrder {
   int get number => this == SortOrder.Asc ? 1 : -1;
 }
+
+enum IsRead {
+  Read,
+  UnRead,
+  None,
+}
