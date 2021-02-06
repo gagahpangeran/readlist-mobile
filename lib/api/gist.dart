@@ -15,8 +15,10 @@ class GistAPI {
     final savedData = await fetchData();
 
     savedData.add(readListItem);
-    String jsonData =
-        jsonEncode({'data': savedData.map((data) => data.toMap()).toList()});
+    String jsonData = jsonEncode(
+      {'data': savedData.map((data) => data.toMap()).toList()},
+      toEncodable: (item) => item is DateTime ? item.toIso8601String() : item,
+    );
 
     final response = await http.patch(
       '$_apiEndpoint/${setting.gistId}',
