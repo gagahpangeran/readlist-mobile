@@ -1,13 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:readlist/utils/sort_filter.dart';
 
 class SortFilterDialog extends StatefulWidget {
+  final void Function(Map<String, Object>) updateSortParameter;
+
+  SortFilterDialog(this.updateSortParameter);
+
   @override
   _SortFilterDialogState createState() => _SortFilterDialogState();
 }
 
 class _SortFilterDialogState extends State<SortFilterDialog> {
-  String _dropdownValue = 'Created At';
-  String _sortOrder = 'DESC';
+  SortBy _sortBy = SortFilter.defaultSortBy;
+  SortOrder _sortOrder = SortFilter.defaultSortOrder;
   String _isRead;
 
   @override
@@ -19,21 +25,19 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
           child: Text('Sort by'),
         ),
         SimpleDialogOption(
-          child: DropdownButton(
-            value: _dropdownValue,
+          child: DropdownButton<SortBy>(
+            value: _sortBy,
             underline: Container(
               height: 2,
               color: Colors.blue,
             ),
-            onChanged: (String newValue) {
-              setState(() {
-                _dropdownValue = newValue;
-              });
-            },
-            items: <String>['Title', 'Updated At', 'Created At']
-                .map((String value) => DropdownMenuItem<String>(
+            onChanged: (newValue) => setState(() {
+              _sortBy = newValue;
+            }),
+            items: <SortBy>[...SortBy.values]
+                .map((value) => DropdownMenuItem(
                       value: value,
-                      child: Text(value),
+                      child: Text(describeEnum(value)),
                     ))
                 .toList(),
           ),
@@ -43,23 +47,19 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
             alignment: WrapAlignment.spaceAround,
             children: <Widget>[
               ChoiceChip(
-                label: Text('ASC'),
-                selected: _sortOrder == 'ASC',
-                onSelected: (_) {
-                  setState(() {
-                    _sortOrder = 'ASC';
-                  });
-                },
+                label: Text('Asc'),
+                selected: _sortOrder == SortOrder.asc,
+                onSelected: (_) => setState(() {
+                  _sortOrder = SortOrder.asc;
+                }),
                 avatar: Icon(Icons.arrow_downward),
               ),
               ChoiceChip(
-                label: Text('DESC'),
-                selected: _sortOrder == 'DESC',
-                onSelected: (_) {
-                  setState(() {
-                    _sortOrder = 'DESC';
-                  });
-                },
+                label: Text('Desc'),
+                selected: _sortOrder == SortOrder.desc,
+                onSelected: (_) => setState(() {
+                  _sortOrder = SortOrder.desc;
+                }),
                 avatar: Icon(Icons.arrow_upward),
               ),
             ],
@@ -107,11 +107,19 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
             alignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 child: Text('Cancel'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  widget.updateSortParameter({
+                    'sortOrder': _sortOrder,
+                    'sortBy': _sortBy,
+                  });
+                  Navigator.pop(context);
+                },
                 child: Text('Apply'),
               ),
             ],
