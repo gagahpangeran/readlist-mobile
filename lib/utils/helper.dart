@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
+import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/utils/sort_filter.dart';
 
 class Helper {
   Helper._();
@@ -51,5 +53,16 @@ class Helper {
     final response = await http.get(link);
     String title = parse(response.body).querySelector('title').text;
     return title;
+  }
+
+  static List<ReadListItem> immutableSort(
+    List<ReadListItem> list,
+    SortFilter sortParam,
+  ) {
+    var newList = [...list];
+    var comparator =
+        SortFilter.getComparator(sortParam.sortBy, sortParam.sortOrder);
+    newList.sort(comparator);
+    return newList;
   }
 }

@@ -3,6 +3,7 @@ import 'package:readlist/api/gist.dart';
 import 'package:readlist/components/read_list_tile.dart';
 import 'package:readlist/components/sort_filter_dialog.dart';
 import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/utils/helper.dart';
 import 'package:readlist/utils/sort_filter.dart';
 
 class ListPage extends StatefulWidget {
@@ -79,7 +80,7 @@ class _ListPageState extends State<ListPage> {
               return Center(child: Text("No Data!"));
             }
 
-            var sortedReadList = SortFilter.sort(readList, _sortParameter);
+            var sortedReadList = Helper.immutableSort(readList, _sortParameter);
 
             return ListView(
               children: sortedReadList
