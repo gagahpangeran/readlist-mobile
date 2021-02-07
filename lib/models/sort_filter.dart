@@ -10,6 +10,15 @@ class SortFilter {
   SortOrder sortOrder;
   IsRead isRead;
 
+  @override
+  String toString() {
+    return '''SortFilter {
+sortBy: $sortBy
+sortOrder: $sortOrder
+isRead: $isRead
+}''';
+  }
+
   SortFilter({
     SortBy sortBy,
     SortOrder sortOrder,
