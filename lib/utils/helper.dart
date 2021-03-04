@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:readlist/models/read_list_item.dart';
@@ -9,25 +8,25 @@ class Helper {
   Helper._();
 
   static SnackBar buildSnackbar({
-    @required String text,
-    void Function() action,
-    String actionLabel,
+    required String text,
+    void Function()? action,
+    String? actionLabel,
   }) {
     return SnackBar(
       content: Text(text),
       behavior: SnackBarBehavior.floating,
       action: action == null
           ? null
-          : SnackBarAction(label: actionLabel, onPressed: action),
+          : SnackBarAction(label: actionLabel!, onPressed: action),
     );
   }
 
   static void submitForm({
-    @required BuildContext context,
-    @required Future<bool> submitFunction(),
-    @required String onSubmitText,
-    @required String onSuccessText,
-    @required String onErrorText,
+    required BuildContext context,
+    required Future<bool> submitFunction(),
+    required String onSubmitText,
+    required String onSuccessText,
+    required String onErrorText,
   }) async {
     final scaffold = ScaffoldMessenger.of(context);
     final onSubmitSnackbar = buildSnackbar(text: onSubmitText);
@@ -51,7 +50,7 @@ class Helper {
 
   static Future<String> fetchTitle(String link) async {
     final response = await http.get(Uri.parse(link));
-    String title = parse(response.body).querySelector('title').text;
+    String title = parse(response.body).querySelector('title')!.text;
     return title;
   }
 
