@@ -12,10 +12,10 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  Future<List<ReadListItem>> _futureReadList;
+  late Future<List<ReadListItem>> _futureReadList;
   SortFilter _sortFilterParam = SortFilter();
 
-  _updateSortParameter(SortFilter value) {
+  void _updateSortParameter(SortFilter value) {
     setState(() {
       _sortFilterParam = value;
     });
@@ -34,7 +34,7 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
-  Widget _buildMainAppBar() {
+  PreferredSizeWidget _buildMainAppBar() {
     return AppBar(
       title: Text('Read List'),
       actions: <Widget>[
@@ -74,7 +74,7 @@ class _ListPageState extends State<ListPage> {
         future: _futureReadList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var readList = snapshot.data;
+            var readList = snapshot.data!;
 
             if (readList.length <= 0) {
               return Center(child: Text("No Data!"));
