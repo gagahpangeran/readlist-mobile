@@ -6,9 +6,9 @@ class SortFilter {
   static final defaultSortOrder = SortOrder.Desc;
   static final defaultIsRead = IsRead.None;
 
-  SortBy sortBy;
-  SortOrder sortOrder;
-  IsRead isRead;
+  late SortBy sortBy;
+  late SortOrder sortOrder;
+  late IsRead isRead;
 
   @override
   String toString() {
@@ -20,9 +20,9 @@ isRead: $isRead
   }
 
   SortFilter({
-    SortBy sortBy,
-    SortOrder sortOrder,
-    IsRead isRead,
+    SortBy? sortBy,
+    SortOrder? sortOrder,
+    IsRead? isRead,
   }) {
     this.sortBy = sortBy ?? defaultSortBy;
     this.sortOrder = sortOrder ?? defaultSortOrder;
@@ -33,9 +33,8 @@ isRead: $isRead
     SortBy sortBy,
     SortOrder sortOrder,
   ) {
-    return (ReadListItem x, ReadListItem y) =>
-        sortOrder.number *
-        x.getValue(sortBy.val).compareTo(y.getValue(sortBy.val));
+    return (ReadListItem x, ReadListItem y) => sortOrder.number *
+        x.getValue(sortBy.val).compareTo(y.getValue(sortBy.val)) as int;
   }
 }
 
@@ -74,7 +73,7 @@ enum IsRead {
 }
 
 extension IsReadValue on IsRead {
-  bool get val {
+  bool? get val {
     switch (this) {
       case IsRead.Read:
         return true;
