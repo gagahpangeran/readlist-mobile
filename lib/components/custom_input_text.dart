@@ -1,4 +1,4 @@
-import 'package:clipboard/clipboard.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 class CustomInputText extends StatefulWidget {
@@ -32,12 +32,11 @@ class CustomInputText extends StatefulWidget {
 class _CustomInputTextState extends State<CustomInputText> {
   bool _isEmpty = true;
 
-  _onPressed() {
+  _onPressed() async {
     if (_isEmpty) {
-      FlutterClipboard.paste().then((value) {
-        widget.controller.text = value;
-        widget.onPaste();
-      });
+      ClipboardData clipboardData = await Clipboard.getData('text/plain');
+      widget.controller.text = clipboardData.text;
+      widget.onPaste();
     } else {
       widget.controller.text = '';
       widget.onClear();
