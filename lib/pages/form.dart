@@ -30,8 +30,8 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  _onSubmit() {
-    if (_formKey.currentState.validate()) {
+  void _onSubmit() {
+    if (_formKey.currentState!.validate()) {
       Helper.submitForm(
         context: context,
         submitFunction: _submitForm,
@@ -42,7 +42,7 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  _fetchTitle() async {
+  void _fetchTitle() async {
     final scaffold = ScaffoldMessenger.of(context);
     scaffold.showSnackBar(Helper.buildSnackbar(text: 'Getting title...'));
     _titleController.text = await Helper.fetchTitle(_linkController.text);
@@ -51,6 +51,7 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: change this to object
     final textInputData = [
       {
         'controller': _linkController,
@@ -78,19 +79,20 @@ class _FormPageState extends State<FormPage> {
           children: <Widget>[
             ...textInputData
                 .map((data) => CustomInputText(
-                      controller: data['controller'],
-                      icon: data['icon'],
-                      labelText: data['labelText'],
-                      validator: data['validator'] ?? false,
-                      onPaste: data['onPaste'],
-                      onEditingComplete: data['onEditingComplete'],
+                      controller: data['controller'] as TextEditingController,
+                      icon: data['icon'] as Icon?,
+                      labelText: data['labelText'] as String?,
+                      validator: data['validator'] as bool? ?? false,
+                      onPaste: data['onPaste'] as void Function()?,
+                      onEditingComplete:
+                          data['onEditingComplete'] as void Function()?,
                     ))
                 .toList(),
             Row(
               children: <Widget>[
                 Checkbox(
                   value: _isRead,
-                  onChanged: (value) => setState(() => _isRead = value),
+                  onChanged: (value) => setState(() => _isRead = value!),
                 ),
                 Text('Already Read'),
               ],
