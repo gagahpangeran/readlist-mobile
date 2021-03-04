@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ReadListTile extends StatefulWidget {
   final ReadListItem item;
 
-  const ReadListTile(this.item) : assert(item != null);
+  ReadListTile(this.item);
 
   @override
   _ReadListTileState createState() => _ReadListTileState();
