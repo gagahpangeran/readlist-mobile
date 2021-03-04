@@ -21,7 +21,7 @@ class GistAPI {
     );
 
     final response = await http.patch(
-      '$_apiEndpoint/${setting.gistId}',
+      Uri.parse('$_apiEndpoint/${setting.gistId}'),
       headers: {'Authorization': 'token ${setting.apiKey}'},
       body: jsonEncode({
         'files': {
@@ -41,7 +41,7 @@ class GistAPI {
     final setting = await Setting.load();
 
     final response = await http.get(
-      '$_apiEndpoint/${setting.gistId}',
+      Uri.parse('$_apiEndpoint/${setting.gistId}'),
       headers: {
         'Authorization': 'token ${setting.apiKey}',
       },

@@ -50,7 +50,7 @@ class Helper {
   }
 
   static Future<String> fetchTitle(String link) async {
-    final response = await http.get(link);
+    final response = await http.get(Uri.parse(link));
     String title = parse(response.body).querySelector('title').text;
     return title;
   }
