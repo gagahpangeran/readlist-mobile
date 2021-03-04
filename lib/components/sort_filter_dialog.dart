@@ -99,9 +99,11 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
           ),
         ),
         SimpleDialogOption(
-          child: OutlineButton(
+          child: OutlinedButton(
             child: Text('Reset all to default'),
-            textColor: Colors.red,
+            style: OutlinedButton.styleFrom(
+              primary: Colors.red,
+            ),
             onPressed: () => setState(() {
               _param = SortFilter();
             }),
@@ -111,7 +113,7 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
           child: ButtonBar(
             alignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
