@@ -54,9 +54,9 @@ class GistAPI {
     }
   }
 
-  static List<ReadListItem> _parseData(String responseBody, String fileName) {
+  static List<ReadListItem> _parseData(String responseBody, String? fileName) {
     var content = jsonDecode(responseBody)['files'][fileName]['content'];
-    List<dynamic> data = jsonDecode(content)['data'];
+    List<dynamic>? data = jsonDecode(content)['data'];
 
     return data == null
         ? []
