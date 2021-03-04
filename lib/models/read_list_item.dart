@@ -1,23 +1,21 @@
-import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadListItem {
-  String _id;
-  String _link;
-  String _title;
-  bool _isRead;
-  DateTime _createdAt;
-  DateTime _updatedAt;
+  late String _id;
+  late String _link;
+  late String _title;
+  late bool _isRead;
+  late DateTime _createdAt;
+  late DateTime _updatedAt;
 
   ReadListItem({
-    @required String link,
-    String id,
-    String title,
-    bool isRead,
-    DateTime createdAt,
-    DateTime updatedAt,
+    required String link,
+    String? id,
+    String? title,
+    bool? isRead,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
-    assert(link != null);
     _id = id ?? Uuid().v1();
     _link = link;
     _title = title == null || title.isEmpty ? link : title;
