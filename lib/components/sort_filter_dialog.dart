@@ -13,7 +13,7 @@ class SortFilterDialog extends StatefulWidget {
 }
 
 class _SortFilterDialogState extends State<SortFilterDialog> {
-  SortFilter _param;
+  late SortFilter _param;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _SortFilterDialogState extends State<SortFilterDialog> {
               color: Colors.blue,
             ),
             onChanged: (newValue) => setState(() {
-              _param.sortBy = newValue;
+              _param.sortBy = newValue!;
             }),
             items: <SortBy>[...SortBy.values]
                 .map((value) => DropdownMenuItem(
