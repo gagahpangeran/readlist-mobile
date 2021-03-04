@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 
 class CustomInputText extends StatefulWidget {
   final TextEditingController controller;
-  final String labelText;
-  final String initialValue;
-  final Icon icon;
-  final void Function() onPaste;
-  final void Function() onClear;
-  final void Function() onEditingComplete;
-  final bool validator;
+  final String? labelText;
+  final String? initialValue;
+  final Icon? icon;
+  final void Function()? onPaste;
+  final void Function()? onClear;
+  final void Function()? onEditingComplete;
+  final bool? validator;
 
   CustomInputText({
-    @required this.controller,
+    required this.controller,
     this.labelText,
     this.initialValue,
     this.icon,
@@ -21,8 +21,7 @@ class CustomInputText extends StatefulWidget {
     this.onEditingComplete,
     this.validator = false,
   }) {
-    assert(controller != null);
-    controller.text = initialValue;
+    controller.text = initialValue ?? "";
   }
 
   @override
@@ -32,21 +31,22 @@ class CustomInputText extends StatefulWidget {
 class _CustomInputTextState extends State<CustomInputText> {
   bool _isEmpty = true;
 
-  _onPressed() async {
+  void _onPressed() async {
     if (_isEmpty) {
-      ClipboardData clipboardData = await Clipboard.getData('text/plain');
-      widget.controller.text = clipboardData.text;
-      widget.onPaste();
+      ClipboardData clipboardData =
+          await Clipboard.getData('text/plain') as ClipboardData;
+      widget.controller.text = clipboardData.text!;
+      widget.onPaste!();
     } else {
       widget.controller.text = '';
-      widget.onClear();
+      widget.onClear!();
     }
   }
 
-  Function(String) _getValidator() {
-    if (widget.validator) {
-      return (String value) =>
-          value.isEmpty ? '${widget.labelText} can\'t be empty' : null;
+  String? Function(String?)? _getValidator() {
+    if (widget.validator!) {
+      return (String? value) =>
+          value!.isEmpty ? '${widget.labelText} can\'t be empty' : null;
     }
 
     return null;
