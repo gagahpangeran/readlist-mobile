@@ -14,7 +14,7 @@ class _SettingPageState extends State<SettingPage> {
   final _gistIdController = TextEditingController();
   final _fileNameController = TextEditingController();
 
-  Future<Setting> _futureSetting;
+  late Future<Setting> _futureSetting;
 
   Future<bool> _saveSetting() async {
     try {
@@ -29,8 +29,8 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  _onSubmit() {
-    if (_formKey.currentState.validate()) {
+  void _onSubmit() {
+    if (_formKey.currentState!.validate()) {
       Helper.submitForm(
         context: context,
         submitFunction: _saveSetting,
@@ -65,8 +65,9 @@ class _SettingPageState extends State<SettingPage> {
         future: _futureSetting,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var setting = snapshot.data;
+            var setting = snapshot.data!;
 
+            // TODO: change this to object
             final textInputData = [
               {
                 'controller': _apiKeyController,
@@ -98,11 +99,12 @@ class _SettingPageState extends State<SettingPage> {
                 children: <Widget>[
                   ...textInputData
                       .map((data) => CustomInputText(
-                            controller: data['controller'],
-                            icon: data['icon'],
-                            labelText: data['labelText'],
-                            validator: data['validator'],
-                            initialValue: data['initialValue'],
+                            controller:
+                                data['controller'] as TextEditingController,
+                            icon: data['icon'] as Icon?,
+                            labelText: data['labelText'] as String?,
+                            validator: data['validator'] as bool?,
+                            initialValue: data['initialValue'] as String?,
                           ))
                       .toList(),
                   Center(
