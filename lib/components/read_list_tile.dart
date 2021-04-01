@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:readlist/models/read_list_item.dart';
+import 'package:readlist/models/read_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReadListTile extends StatefulWidget {
-  final ReadListItem item;
+  final ReadList readList;
 
-  ReadListTile(this.item);
+  ReadListTile(this.readList);
 
   @override
   _ReadListTileState createState() => _ReadListTileState();
 }
 
 class _ReadListTileState extends State<ReadListTile> {
-  final format = DateFormat('yyyy-MM-dd, HH:mm:ss');
+  final dateFormat = DateFormat('yyyy-MM-dd');
 
   _launchLink() async {
-    final url = widget.item.link;
+    final url = widget.readList.link;
     if (await canLaunch(url)) {
       await launch(url);
     }
@@ -24,12 +24,19 @@ class _ReadListTileState extends State<ReadListTile> {
 
   @override
   Widget build(BuildContext context) {
+    bool isRead = widget.readList.readAt != null;
     return ListTile(
-      tileColor: widget.item.isRead ? null : Colors.red[100],
-      minVerticalPadding: 16.0,
-      title: Text(widget.item.title),
-      subtitle: Text("""Updated At : ${format.format(widget.item.updatedAt)}
-Created At : ${format.format(widget.item.createdAt)}"""),
+      title: Text(
+        widget.readList.title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 2,
+      ),
+      subtitle: Text(
+        isRead
+            ? "Read At : ${dateFormat.format(widget.readList.readAt!)}"
+            : "Unread",
+        style: isRead ? null : TextStyle(color: Colors.red),
+      ),
       trailing: IconButton(
         icon: Icon(
           Icons.open_in_new,
