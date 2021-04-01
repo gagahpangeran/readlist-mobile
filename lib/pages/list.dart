@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/api/gist.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/read_list_tile.dart';
-import 'package:readlist/components/sort_filter_dialog.dart';
-import 'package:readlist/models/read_list_item.dart';
-import 'package:readlist/utils/helper.dart';
-import 'package:readlist/models/sort_filter.dart';
+import 'package:readlist/models/read_list.dart';
 
 class ListPage extends StatefulWidget {
   @override
@@ -12,26 +9,25 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  late Future<List<ReadListItem>> _futureReadList;
-  SortFilter _sortFilterParam = SortFilter();
-
-  void _updateSortParameter(SortFilter value) {
-    setState(() {
-      _sortFilterParam = value;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _futureReadList = GistAPI.fetchData();
-  }
+  final String _allReadListsQuery = """
+    query AllReadLists {
+      allReadLists(
+        skip: 0
+        limit: 10
+        sort: { order: DESC, fields: readAt }
+        filter: { readAt: { isNull: false } }
+      ) {
+        id
+        title
+        link
+        readAt
+        comment
+      }
+    }
+  """;
 
   void _openView(String route) async {
     await Navigator.pushNamed(context, route);
-    setState(() {
-      _futureReadList = GistAPI.fetchData();
-    });
   }
 
   PreferredSizeWidget _buildMainAppBar() {
@@ -39,80 +35,55 @@ class _ListPageState extends State<ListPage> {
       title: Text('Read List'),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.sort),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) =>
-                  SortFilterDialog(_updateSortParameter, _sortFilterParam),
-            );
-          },
-        ),
-        IconButton(
           icon: Icon(Icons.settings),
           onPressed: () => _openView('/setting'),
-        ),
-        IconButton(
-          icon: Icon(Icons.refresh),
-          onPressed: () => setState(() {
-            _futureReadList = GistAPI.fetchData();
-          }),
-        ),
-        IconButton(
-          icon: Icon(Icons.search),
-          onPressed: () {},
         ),
       ],
     );
   }
 
+  Widget _buildBody(QueryResult result) {
+    if (result.isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    if (result.hasException) {
+      return Center(child: Text("Fetch error!!!"));
+    }
+
+    List<dynamic> allReadListsJson = result.data!['allReadLists'];
+    List<ReadList> allReadLists = allReadListsJson
+        .map((readList) => ReadList.fromJson(readList))
+        .toList();
+
+    if (allReadLists.isEmpty) {
+      return Center(child: Text("No Data!"));
+    }
+
+    return ListView(
+      children: allReadLists.map((readList) => ReadListTile(readList)).toList(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildMainAppBar(),
-      body: FutureBuilder<List<ReadListItem>>(
-        future: _futureReadList,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var readList = snapshot.data!;
-
-            if (readList.length <= 0) {
-              return Center(child: Text("No Data!"));
-            }
-
-            var sortedList = Helper.immutableSort(readList, _sortFilterParam);
-            var filteredList =
-                Helper.advancedFilter(sortedList, _sortFilterParam);
-
-            return ListView(
-              children: filteredList
-                  .map((readListItem) => ReadListTile(readListItem))
-                  .toList(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Error when fetching data!"),
-                  Text("Make sure you already set up you setting."),
-                  ElevatedButton(
-                    onPressed: () => _openView('/setting'),
-                    child: Text('Open Setting'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _openView('/form'),
-        tooltip: 'Add New List',
-        child: Icon(Icons.add),
-      ),
+    return Query(
+      options: QueryOptions(document: gql(_allReadListsQuery)),
+      builder: (
+        QueryResult result, {
+        VoidCallback? refetch,
+        FetchMore? fetchMore,
+      }) {
+        return Scaffold(
+          appBar: _buildMainAppBar(),
+          body: _buildBody(result),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _openView('/form'),
+            tooltip: 'Add New List',
+            child: Icon(Icons.add),
+          ),
+        );
+      },
     );
   }
 }
