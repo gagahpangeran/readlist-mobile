@@ -14,6 +14,29 @@ class _AuthPageState extends State<AuthPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  late Future<Map<String, String>?> _futureAuthData;
+
+  Future<Map<String, String>?> _getAuthData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("token");
+    String? username = prefs.getString("username");
+
+    if (token != null && username != null) {
+      return {
+        'token': token,
+        'username': username,
+      };
+    }
+
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _futureAuthData = _getAuthData();
+  }
+
   final String _loginMutation = """
     mutation Login(\$username: String!, \$password: String!) {
       login(username: \$username, password: \$password) {
@@ -69,6 +92,27 @@ class _AuthPageState extends State<AuthPage> {
     scaffold.showSnackBar(errorSnackbar);
   }
 
+  void _onLogoutButtonPressed() async {
+    final scaffold = ScaffoldMessenger.of(context);
+    final onLogoutSnackbar = Helper.buildSnackbar(text: "Logout...");
+    scaffold.showSnackBar(onLogoutSnackbar);
+
+    final prefs = await SharedPreferences.getInstance();
+    var success = await prefs.clear();
+
+    if (success) {
+      final successLogoutSnackbar =
+          Helper.buildSnackbar(text: "Logout Success!");
+      scaffold.showSnackBar(successLogoutSnackbar);
+
+      Navigator.pop(context);
+    } else {
+      final failedLogoutSnackbar =
+          Helper.buildSnackbar(text: "Error, can't logout!");
+      scaffold.showSnackBar(failedLogoutSnackbar);
+    }
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -92,32 +136,53 @@ class _AuthPageState extends State<AuthPage> {
           appBar: AppBar(
             title: Text('Settings'),
           ),
-          body: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CustomInputText(
-                  controller: _usernameController,
-                  icon: Icon(Icons.person),
-                  labelText: 'Username',
-                  validator: true,
-                ),
-                CustomInputText(
-                  controller: _passwordController,
-                  icon: Icon(Icons.vpn_key),
-                  labelText: 'Password',
-                  validator: true,
-                  password: true,
-                ),
-                Center(
-                  child: ElevatedButton(
-                    child: Text('Login'),
-                    onPressed: () => _onLoginButtonPressed(runMutation),
+          body: FutureBuilder<Map<String, String>?>(
+            future: _futureAuthData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
+                final username = snapshot.data!['username'];
+
+                return Center(
+                  child: Column(
+                    children: <Widget>[
+                      Text("You are logged in as $username"),
+                      ElevatedButton(
+                        onPressed: _onLogoutButtonPressed,
+                        child: Text("Logout"),
+                      ),
+                    ],
                   ),
-                )
-              ],
-            ),
+                );
+              }
+
+              return Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    CustomInputText(
+                      controller: _usernameController,
+                      icon: Icon(Icons.person),
+                      labelText: 'Username',
+                      validator: true,
+                    ),
+                    CustomInputText(
+                      controller: _passwordController,
+                      icon: Icon(Icons.vpn_key),
+                      labelText: 'Password',
+                      validator: true,
+                      password: true,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        child: Text('Login'),
+                        onPressed: () => _onLoginButtonPressed(runMutation),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
