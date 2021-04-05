@@ -10,6 +10,7 @@ class CustomInputText extends StatefulWidget {
   final void Function()? onClear;
   final void Function()? onEditingComplete;
   final bool? validator;
+  final bool password;
 
   CustomInputText({
     required this.controller,
@@ -20,6 +21,7 @@ class CustomInputText extends StatefulWidget {
     this.onClear,
     this.onEditingComplete,
     this.validator = false,
+    this.password = false,
   }) {
     controller.text = initialValue ?? "";
   }
@@ -68,6 +70,7 @@ class _CustomInputTextState extends State<CustomInputText> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: widget.password,
       controller: widget.controller,
       decoration: InputDecoration(
         icon: widget.icon,
