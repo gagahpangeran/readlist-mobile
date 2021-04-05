@@ -52,7 +52,15 @@ class _ListPageState extends State<ListPage> {
     }
 
     if (result.hasException) {
-      return Center(child: Text("Fetch error!!!"));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Can't fetch data!"),
+            Text("Make sure you are connected to internet."),
+          ],
+        ),
+      );
     }
 
     List<dynamic> allReadListsJson = result.data!['allReadLists'];
