@@ -155,24 +155,30 @@ class _AuthPageState extends State<AuthPage> {
                 );
               }
 
+              final textInputData = <CustomInputTextData>[
+                new CustomInputTextData(
+                  controller: _usernameController,
+                  icon: Icon(Icons.person),
+                  labelText: 'Username',
+                  validator: true,
+                ),
+                new CustomInputTextData(
+                  controller: _passwordController,
+                  icon: Icon(Icons.vpn_key),
+                  labelText: 'Password',
+                  validator: true,
+                  password: true,
+                ),
+              ];
+
               return Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    CustomInputText(
-                      controller: _usernameController,
-                      icon: Icon(Icons.person),
-                      labelText: 'Username',
-                      validator: true,
-                    ),
-                    CustomInputText(
-                      controller: _passwordController,
-                      icon: Icon(Icons.vpn_key),
-                      labelText: 'Password',
-                      validator: true,
-                      password: true,
-                    ),
+                    ...textInputData
+                        .map((data) => CustomInputText(args: data))
+                        .toList(),
                     Center(
                       child: ElevatedButton(
                         child: Text('Login'),

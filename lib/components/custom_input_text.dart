@@ -2,29 +2,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 class CustomInputText extends StatefulWidget {
-  final TextEditingController controller;
-  final String? labelText;
-  final String? initialValue;
-  final Icon? icon;
-  final void Function()? onPaste;
-  final void Function()? onClear;
-  final void Function()? onEditingComplete;
-  final bool? validator;
-  final bool password;
+  final CustomInputTextData args;
 
-  CustomInputText({
-    required this.controller,
-    this.labelText,
-    this.initialValue,
-    this.icon,
-    this.onPaste,
-    this.onClear,
-    this.onEditingComplete,
-    this.validator = false,
-    this.password = false,
-  }) {
-    controller.text = initialValue ?? "";
-  }
+  CustomInputText({required this.args});
 
   @override
   _CustomInputTextState createState() => _CustomInputTextState();
@@ -37,18 +17,18 @@ class _CustomInputTextState extends State<CustomInputText> {
     if (_isEmpty) {
       ClipboardData clipboardData =
           await Clipboard.getData('text/plain') as ClipboardData;
-      widget.controller.text = clipboardData.text!;
-      widget.onPaste!();
+      widget.args.controller.text = clipboardData.text!;
+      widget.args.onPaste!();
     } else {
-      widget.controller.text = '';
-      widget.onClear!();
+      widget.args.controller.text = '';
+      widget.args.onClear!();
     }
   }
 
   String? Function(String?)? _getValidator() {
-    if (widget.validator!) {
+    if (widget.args.validator) {
       return (String? value) =>
-          value!.isEmpty ? '${widget.labelText} can\'t be empty' : null;
+          value!.isEmpty ? '${widget.args.labelText} can\'t be empty' : null;
     }
 
     return null;
@@ -58,11 +38,11 @@ class _CustomInputTextState extends State<CustomInputText> {
   void initState() {
     super.initState();
     setState(() {
-      _isEmpty = widget.controller.text.isEmpty;
+      _isEmpty = widget.args.controller.text.isEmpty;
     });
-    widget.controller.addListener(() {
+    widget.args.controller.addListener(() {
       setState(() {
-        _isEmpty = widget.controller.text.isEmpty;
+        _isEmpty = widget.args.controller.text.isEmpty;
       });
     });
   }
@@ -70,18 +50,44 @@ class _CustomInputTextState extends State<CustomInputText> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: widget.password,
-      controller: widget.controller,
+      obscureText: widget.args.password,
+      controller: widget.args.controller,
       decoration: InputDecoration(
-        icon: widget.icon,
-        labelText: widget.labelText,
+        icon: widget.args.icon,
+        labelText: widget.args.labelText,
         suffixIcon: IconButton(
           icon: Icon(_isEmpty ? Icons.paste : Icons.clear),
           onPressed: _onPressed,
         ),
       ),
-      onEditingComplete: widget.onEditingComplete,
+      onEditingComplete: widget.args.onEditingComplete,
       validator: _getValidator(),
     );
+  }
+}
+
+class CustomInputTextData {
+  final TextEditingController controller;
+  final String? labelText;
+  final String? initialValue;
+  final Icon? icon;
+  final void Function()? onPaste;
+  final void Function()? onClear;
+  final void Function()? onEditingComplete;
+  final bool validator;
+  final bool password;
+
+  CustomInputTextData({
+    required this.controller,
+    this.labelText,
+    this.initialValue,
+    this.icon,
+    this.onPaste,
+    this.onClear,
+    this.onEditingComplete,
+    this.validator = false,
+    this.password = false,
+  }) {
+    controller.text = initialValue ?? "";
   }
 }

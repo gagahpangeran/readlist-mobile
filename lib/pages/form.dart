@@ -51,21 +51,20 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: change this to object
     final textInputData = [
-      {
-        'controller': _linkController,
-        'icon': Icon(Icons.link),
-        'labelText': 'Link',
-        'validator': true,
-        'onPaste': _fetchTitle,
-        'onEditingComplete': _fetchTitle,
-      },
-      {
-        'controller': _titleController,
-        'icon': Icon(Icons.title),
-        'labelText': 'Title',
-      }
+      new CustomInputTextData(
+        controller: _linkController,
+        icon: Icon(Icons.link),
+        labelText: 'Link',
+        validator: true,
+        onPaste: _fetchTitle,
+        onEditingComplete: _fetchTitle,
+      ),
+      new CustomInputTextData(
+        controller: _titleController,
+        icon: Icon(Icons.title),
+        labelText: 'Title',
+      ),
     ];
 
     return Scaffold(
@@ -78,15 +77,7 @@ class _FormPageState extends State<FormPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ...textInputData
-                .map((data) => CustomInputText(
-                      controller: data['controller'] as TextEditingController,
-                      icon: data['icon'] as Icon?,
-                      labelText: data['labelText'] as String?,
-                      validator: data['validator'] as bool? ?? false,
-                      onPaste: data['onPaste'] as void Function()?,
-                      onEditingComplete:
-                          data['onEditingComplete'] as void Function()?,
-                    ))
+                .map((data) => CustomInputText(args: data))
                 .toList(),
             Row(
               children: <Widget>[
