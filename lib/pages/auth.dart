@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/custom_input_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -21,6 +22,19 @@ class _AuthPageState extends State<AuthPage> {
     }
   """;
 
+  void _saveAuthData(dynamic data) async {
+    String? token = data['login']['token'];
+    String? username = data['login']['username'];
+
+    if (token != null && username != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString("token", token);
+      await prefs.setString("username", username);
+    }
+
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -33,10 +47,7 @@ class _AuthPageState extends State<AuthPage> {
     return Mutation(
       options: MutationOptions(
         document: gql(_loginMutation),
-        onCompleted: (data) {
-          print("Login");
-          print(data);
-        },
+        onCompleted: _saveAuthData,
       ),
       builder: (
         RunMutation runMutation,
