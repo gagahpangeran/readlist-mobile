@@ -37,6 +37,9 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   void _saveAuthData(dynamic data) async {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.hideCurrentSnackBar();
+
     String? token = data['login']['token'];
     String? username = data['login']['username'];
 
@@ -44,9 +47,18 @@ class _AuthPageState extends State<AuthPage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("token", token);
       await prefs.setString("username", username);
-    }
 
-    Navigator.pop(context);
+      final successSnackbar = Helper.buildSnackbar(text: "Login Success!");
+      scaffold.showSnackBar(successSnackbar);
+
+      Navigator.pop(context);
+    } else {
+      final errorSnackbar =
+          Helper.buildSnackbar(text: "Error, there is something wrong!");
+      scaffold.showSnackBar(errorSnackbar);
+    }
+  }
+
   }
 
   @override
