@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/custom_input_text.dart';
+import 'package:readlist/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthPage extends StatefulWidget {
@@ -21,6 +22,19 @@ class _AuthPageState extends State<AuthPage> {
       }
     }
   """;
+
+  void _onLoginButtonPressed(RunMutation runMutation) {
+    if (_formKey.currentState!.validate()) {
+      final scaffold = ScaffoldMessenger.of(context);
+      final onLoginSnackbar = Helper.buildSnackbar(text: "Login...");
+      scaffold.showSnackBar(onLoginSnackbar);
+
+      runMutation({
+        'username': _usernameController.text,
+        'password': _passwordController.text,
+      });
+    }
+  }
 
   void _saveAuthData(dynamic data) async {
     String? token = data['login']['token'];
@@ -78,12 +92,7 @@ class _AuthPageState extends State<AuthPage> {
                 Center(
                   child: ElevatedButton(
                     child: Text('Login'),
-                    onPressed: () {
-                      runMutation({
-                        'username': _usernameController.text,
-                        'password': _passwordController.text,
-                      });
-                    },
+                    onPressed: () => _onLoginButtonPressed(runMutation),
                   ),
                 )
               ],
