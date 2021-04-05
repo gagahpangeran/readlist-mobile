@@ -59,6 +59,14 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
+  void _onLoginError(OperationException? error) {
+    // TODO: logging the error to somewhere
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.hideCurrentSnackBar();
+
+    final errorSnackbar =
+        Helper.buildSnackbar(text: "Error, there is something wrong!");
+    scaffold.showSnackBar(errorSnackbar);
   }
 
   @override
@@ -74,6 +82,7 @@ class _AuthPageState extends State<AuthPage> {
       options: MutationOptions(
         document: gql(_loginMutation),
         onCompleted: _saveAuthData,
+        onError: _onLoginError,
       ),
       builder: (
         RunMutation runMutation,
