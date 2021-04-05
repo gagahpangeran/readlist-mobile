@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readlist/components/gql_wrapper.dart';
 import 'package:readlist/pages/form.dart';
 import 'package:readlist/pages/list.dart';
-import 'package:readlist/pages/setting.dart';
+import 'package:readlist/pages/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/list': (context) => ListPage(),
           '/form': (context) => FormPage(),
-          '/setting': (content) => SettingPage(),
+          '/auth': (content) => AuthPage(),
         },
       ),
     );

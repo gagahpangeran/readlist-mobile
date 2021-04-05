@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/custom_input_text.dart';
 
-class SettingPage extends StatefulWidget {
+class AuthPage extends StatefulWidget {
   @override
-  _SettingPageState createState() => _SettingPageState();
+  _AuthPageState createState() => _AuthPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();

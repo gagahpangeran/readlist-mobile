@@ -35,9 +35,13 @@ class _ListPageState extends State<ListPage> {
       title: Text('Read List'),
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () => _openView('/setting'),
+          icon: Icon(Icons.account_circle),
+          onPressed: () => _openView('/auth'),
         ),
+        IconButton(
+          icon: Icon(Icons.refresh),
+          onPressed: _refetch,
+        )
       ],
     );
   }
