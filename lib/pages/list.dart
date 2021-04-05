@@ -26,21 +26,22 @@ class _ListPageState extends State<ListPage> {
     }
   """;
 
-  void _openView(String route) async {
+  void _openView(String route, void Function()? refetch) async {
     await Navigator.pushNamed(context, route);
+    refetch!();
   }
 
-  PreferredSizeWidget _buildMainAppBar() {
+  PreferredSizeWidget _buildMainAppBar(void Function()? refetch) {
     return AppBar(
       title: Text('Read List'),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.account_circle),
-          onPressed: () => _openView('/auth'),
+          onPressed: () => _openView('/auth', refetch),
         ),
         IconButton(
           icon: Icon(Icons.refresh),
-          onPressed: _refetch,
+          onPressed: refetch,
         )
       ],
     );
@@ -87,10 +88,10 @@ class _ListPageState extends State<ListPage> {
         FetchMore? fetchMore,
       }) {
         return Scaffold(
-          appBar: _buildMainAppBar(),
+          appBar: _buildMainAppBar(refetch),
           body: _buildBody(result),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => _openView('/form'),
+            onPressed: () => _openView('/form', refetch),
             tooltip: 'Add New List',
             child: Icon(Icons.add),
           ),
