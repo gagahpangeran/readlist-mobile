@@ -144,6 +144,7 @@ class _AuthPageState extends State<AuthPage> {
 
                 return Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text("You are logged in as $username"),
                       ElevatedButton(
