@@ -28,6 +28,10 @@ class _FormPageState extends State<FormPage> {
 
   void _onSubmitButtonPressed(RunMutation runMutation) {
     if (_formKey.currentState!.validate()) {
+      final scaffold = ScaffoldMessenger.of(context);
+      final onLoginSnackbar = Helper.buildSnackbar(text: "Submitting...");
+      scaffold.showSnackBar(onLoginSnackbar);
+
       runMutation({
         'link': _linkController.text,
         'title': _titleController.text,
@@ -37,13 +41,22 @@ class _FormPageState extends State<FormPage> {
   }
 
   void _onAddSuccess(dynamic data) {
-    print('success!');
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.hideCurrentSnackBar();
+
+    final successSnackbar = Helper.buildSnackbar(text: "Success submit data!");
+    scaffold.showSnackBar(successSnackbar);
     Navigator.pop(context);
   }
 
   void _onAddError(OperationException? error) {
-    print('error');
-    print(error);
+    // TODO: logging the error to somewhere
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.hideCurrentSnackBar();
+
+    final errorSnackbar =
+        Helper.buildSnackbar(text: "Error, there is something wrong!");
+    scaffold.showSnackBar(errorSnackbar);
   }
 
   void _fetchTitle() async {
