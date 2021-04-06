@@ -13,8 +13,10 @@ class GQLWrapper extends StatefulWidget {
 }
 
 class _GQLWrapperState extends State<GQLWrapper> {
-  String _serverLink =
-      Platform.environment['GRAPHQL'] ?? "http://localhost:9000/graphql";
+  static const GRAPHQL = String.fromEnvironment(
+    'GRAPHQL',
+    defaultValue: 'http://localhost:9000/graphql',
+  );
 
   late Future<Map<String, String>?> _futureAuthData;
 
@@ -45,7 +47,7 @@ class _GQLWrapperState extends State<GQLWrapper> {
       future: _futureAuthData,
       builder: (context, snapshot) {
         Link? link;
-        final HttpLink httpLink = HttpLink(_serverLink);
+        final HttpLink httpLink = HttpLink(GRAPHQL);
 
         if (snapshot.hasData && snapshot.data != null) {
           String? token = snapshot.data!['token'];
