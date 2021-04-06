@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/custom_input_text.dart';
 import 'package:readlist/utils/helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -13,6 +14,29 @@ class _FormPageState extends State<FormPage> {
   final _linkController = TextEditingController();
   final _titleController = TextEditingController();
   bool _isRead = true;
+
+  late Future<Map<String, String>?> _futureAuthData;
+
+  Future<Map<String, String>?> _getAuthData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString("token");
+    String? username = prefs.getString("username");
+
+    if (token != null && username != null) {
+      return {
+        'token': token,
+        'username': username,
+      };
+    }
+
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _futureAuthData = _getAuthData();
+  }
 
   final String _addReadListMutation = """
   mutation AddReadList(\$link: String!, \$title: String!, \$readAt: DateTime) {
@@ -99,31 +123,54 @@ class _FormPageState extends State<FormPage> {
           appBar: AppBar(
             title: Text('Add New List'),
           ),
-          body: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ...textInputData
-                    .map((data) => CustomInputText(args: data))
-                    .toList(),
-                Row(
+          body: FutureBuilder<Map<String, String>?>(
+            future: _futureAuthData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      ...textInputData
+                          .map((data) => CustomInputText(args: data))
+                          .toList(),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                            value: _isRead,
+                            onChanged: (value) =>
+                                setState(() => _isRead = value!),
+                          ),
+                          Text('Already Read'),
+                        ],
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () => _onSubmitButtonPressed(runMutation),
+                          child: Text('Submit'),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Checkbox(
-                      value: _isRead,
-                      onChanged: (value) => setState(() => _isRead = value!),
-                    ),
-                    Text('Already Read'),
+                    Text("You have to login to submit new list!"),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/auth');
+                      },
+                      child: Text("Login"),
+                    )
                   ],
                 ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () => _onSubmitButtonPressed(runMutation),
-                    child: Text('Submit'),
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         );
       },
