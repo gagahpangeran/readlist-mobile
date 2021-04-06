@@ -53,6 +53,7 @@ class _ListPageState extends State<ListPage> {
     }
 
     if (result.hasException) {
+      // TODO: should logging this error to somewhere
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
