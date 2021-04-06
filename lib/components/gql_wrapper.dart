@@ -44,14 +44,19 @@ class _GQLWrapperState extends State<GQLWrapper> {
     return FutureBuilder<Map<String, String>?>(
       future: _futureAuthData,
       builder: (context, snapshot) {
-        Link link = HttpLink(_serverLink);
+        Link? link;
+        final HttpLink httpLink = HttpLink(_serverLink);
 
         if (snapshot.hasData && snapshot.data != null) {
           String? token = snapshot.data!['token'];
 
           if (token != null) {
-            link.concat(AuthLink(getToken: () => 'Bearer $token'));
+            link = AuthLink(getToken: () => 'Bearer $token').concat(httpLink);
           }
+        }
+
+        if (link == null) {
+          link = httpLink;
         }
 
         ValueNotifier<GraphQLClient> client = ValueNotifier(
