@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:readlist/api/gist.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:readlist/components/custom_input_text.dart';
-import 'package:readlist/models/read_list_item.dart';
 import 'package:readlist/utils/helper.dart';
 
 class FormPage extends StatefulWidget {
@@ -15,31 +14,36 @@ class _FormPageState extends State<FormPage> {
   final _titleController = TextEditingController();
   bool _isRead = true;
 
-  Future<bool> _submitForm() async {
-    final readListItem = ReadListItem(
-      link: _linkController.text,
-      title: _titleController.text,
-      isRead: _isRead,
-    );
+  final String _addReadListMutation = """
+  mutation AddReadList(\$link: String!, \$title: String!, \$readAt: DateTime) {
+    addReadList(data: {
+      link: \$link
+      title: \$title
+      readAt: \$readAt
+    }) {
+      id
+    }
+  }
+  """;
 
-    try {
-      await GistAPI.submitData(readListItem);
-      return true;
-    } catch (e) {
-      return false;
+  void _onSubmitButtonPressed(RunMutation runMutation) {
+    if (_formKey.currentState!.validate()) {
+      runMutation({
+        'link': _linkController.text,
+        'title': _titleController.text,
+        'readAt': _isRead ? (new DateTime.now()).toIso8601String() : null,
+      });
     }
   }
 
-  void _onSubmit() {
-    if (_formKey.currentState!.validate()) {
-      Helper.submitForm(
-        context: context,
-        submitFunction: _submitForm,
-        onSubmitText: 'Submitting data...',
-        onSuccessText: 'Success submit data!',
-        onErrorText: 'Error! Can\'t submit data',
-      );
-    }
+  void _onAddSuccess(dynamic data) {
+    print('success!');
+    Navigator.pop(context);
+  }
+
+  void _onAddError(OperationException? error) {
+    print('error');
+    print(error);
   }
 
   void _fetchTitle() async {
@@ -64,39 +68,52 @@ class _FormPageState extends State<FormPage> {
         controller: _titleController,
         icon: Icon(Icons.title),
         labelText: 'Title',
+        validator: true,
       ),
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add New List'),
+    return Mutation(
+      options: MutationOptions(
+        document: gql(_addReadListMutation),
+        onCompleted: _onAddSuccess,
+        onError: _onAddError,
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ...textInputData
-                .map((data) => CustomInputText(args: data))
-                .toList(),
-            Row(
+      builder: (
+        RunMutation runMutation,
+        QueryResult? result,
+      ) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Add New List'),
+          ),
+          body: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Checkbox(
-                  value: _isRead,
-                  onChanged: (value) => setState(() => _isRead = value!),
+                ...textInputData
+                    .map((data) => CustomInputText(args: data))
+                    .toList(),
+                Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: _isRead,
+                      onChanged: (value) => setState(() => _isRead = value!),
+                    ),
+                    Text('Already Read'),
+                  ],
                 ),
-                Text('Already Read'),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () => _onSubmitButtonPressed(runMutation),
+                    child: Text('Submit'),
+                  ),
+                ),
               ],
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _onSubmit,
-                child: Text('Submit'),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
